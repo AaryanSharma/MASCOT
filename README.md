@@ -92,8 +92,6 @@ msdpp/
 │       ├── div_selected.json      ← Method + hyperparameter grid configs
 │       └── tables/                ← Per-task result JSON files (PP_geo, PP_hour, etc.)
 ├── results/analysis_vg_i1m.py    ← VG and I1M result analysis
-├── environments/                  ← Docker configuration
-├── Makefile                       ← Docker launch commands
 ├── pyproject.toml                 ← Dependencies (uv)
 ```
 

@@ -1,0 +1,52 @@
+{
+  "summarization": {
+    "div_method": [
+      "prob_coverage"
+    ],
+    "div_params": {
+      "theta": [0.2],
+      "sigma_geo": [10.0],
+      "sigma_time": [0.5]
+    },
+    "name_suffix": ""
+  },
+  "model_aware": {
+    "div_method": [
+      "ma_smf"
+    ],
+    "div_params": {
+      "theta": [0.7],
+      "sigma_geo": [5.0],
+      "sigma_time": [0.5],
+      "ablation_no_norm": [false],
+      "ablation_no_omega": [false]
+    },
+    "name_suffix": ""
+  },
+  "ablations_no_norm": {
+    "div_method": [
+      "ma_smf"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "sigma_geo": [1.0, 5.0, 10.0, 15.0],
+      "sigma_time": [0.5],
+      "ablation_no_norm": [true],
+      "ablation_no_omega": [false]
+    },
+    "name_suffix": "_ablation_no_norm"
+  },
+  "ablations_no_omega": {
+    "div_method": [
+      "ma_smf"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "sigma_geo": [1.0, 5.0, 10.0, 15.0],
+      "sigma_time": [0.5],
+      "ablation_no_norm": [false],
+      "ablation_no_omega": [true]
+    },
+    "name_suffix": "_ablation_no_omega"
+  }
+}

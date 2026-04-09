@@ -1,0 +1,12 @@
+{
+  "data_name": [
+    "VG_hour"
+  ],
+  "model_name": "blip2",
+  "model_params": {
+    "pretrained_model": "Salesforce/blip2-itm-vit-g-coco",
+    "use_itm": 0
+  },
+  "subset_k": 200,
+  "top_k": 20
+}

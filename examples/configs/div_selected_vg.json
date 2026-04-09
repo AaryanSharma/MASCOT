@@ -1,0 +1,90 @@
+{
+  "dpps": {
+    "div_method": [
+      "dpp_sim_average",
+      "msdpp",
+      "msdpp_tn",
+      "msdpp_tn_tvms"
+    ],
+    "div_params": {
+      "beta": [0.4, 0.5, 0.6],
+      "theta": [0.8, 0.9]
+    },
+    "name_suffix": ""
+  },
+  "summarization": {
+    "div_method": [
+      "prob_coverage"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "sigma_geo": [1.0],
+      "sigma_time": [0.5, 1.5, 3.0]
+    },
+    "name_suffix": ""
+  },
+  "model_aware": {
+    "div_method": [
+      "ma_smf"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "sigma_geo": [1.0],
+      "sigma_time": [0.5, 1.5, 3.0],
+      "ablation_no_norm": [false],
+      "ablation_no_omega": [false]
+    },
+    "name_suffix": ""
+  },
+  "ablations_no_norm": {
+    "div_method": [
+      "ma_smf"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "sigma_geo": [1.0],
+      "sigma_time": [0.5, 1.5, 3.0],
+      "ablation_no_norm": [true],
+      "ablation_no_omega": [false]
+    },
+    "name_suffix": "_ablation_no_norm"
+  },
+  "ablations_no_omega": {
+    "div_method": [
+      "ma_smf"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      "sigma_geo": [1.0],
+      "sigma_time": [0.5, 1.5, 3.0],
+      "ablation_no_norm": [false],
+      "ablation_no_omega": [true]
+    },
+    "name_suffix": "_ablation_no_omega"
+  },
+  "baseline_blip2": {
+    "div_method": [
+      "blip2"
+    ],
+    "div_params": {},
+    "name_suffix": ""
+  },
+  "baseline_mmr": {
+    "div_method": [
+      "mmr"
+    ],
+    "div_params": {
+      "theta": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    },
+    "name_suffix": ""
+  },
+  "baseline_clustering": {
+    "div_method": [
+      "clustering"
+    ],
+    "div_params": {
+      "num_clusters": [40, 60, 80]
+    },
+    "name_suffix": ""
+  }
+}

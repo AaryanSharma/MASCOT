@@ -41,7 +41,6 @@ MASCOT matches MS-DPP performance on **increase** tasks while fundamentally outp
    - **Soft Information Units (IUs)**: Gaussian-kernel soft-binning of discrete metadata (24 temporal bins; geographic grid) to prevent hard boundary penalties.
    - **Normalized Semantic Relevance (R-hat)**: Local min-max normalization of VLM cosine scores to compete against cumulative coverage sums.
    - **Query-Driven Bin Importance (Ω)**: Dynamic bin weights equal to peak relevance within each bin — prevents wasting retrieval budget on empty or irrelevant bins.
-   - **Zero-Shot Integrity**: The greedy initialization guarantees the top-1 result is always the base VLM's best semantic match (coverage penalty = 0 when S = ∅).
 
 3. **Semantic-Safe Diversity Decrease**: MASCOT is the only method capable of both increasing and decreasing diversity without triggering recall collapse.
 

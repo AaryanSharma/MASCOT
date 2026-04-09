@@ -95,7 +95,6 @@ msdpp/
 ├── environments/                  ← Docker configuration
 ├── Makefile                       ← Docker launch commands
 ├── pyproject.toml                 ← Dependencies (uv)
-└── git_push_submission.sh         ← Stages supplementary code for submission
 ```
 
 ---

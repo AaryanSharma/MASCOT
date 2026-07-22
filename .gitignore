@@ -33,10 +33,11 @@ hf_cache/
 *.arrow
 *.parquet
 
-# Logs / results — keep only summary files under results/**, ignore intermediate JSONL/logs
+# Logs / results — keep committed result artifacts under results/, ignore top-level logs
 *.log
 *.out
 nohup.out
+!results/**/*.log
 results/**/checkpoint*.json
 results/**/failure_cases_*.json
 

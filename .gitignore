@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+build/
+dist/
+
+# Virtual envs
+.venv/
+venv/
+env/
+.venv_*/
+
+# uv / poetry
+uv.lock
+.uv/
+
+# Model / data / cache
+share_datasets/
+hf_cache/
+.cache/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.pkl
+*.npy
+*.npz
+*.arrow
+*.parquet
+
+# Logs / results — keep only summary files under results/**, ignore intermediate JSONL/logs
+*.log
+*.out
+nohup.out
+results/**/checkpoint*.json
+results/**/failure_cases_*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Env
+.env
+.env.local

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import torch
 from datasets import Dataset, DatasetDict
@@ -14,6 +14,8 @@ class RetrievalDataset:
     retrieval_words: list[StrictStr]
     labels: dict[StrictStr, torch.Tensor]
     ext_data: torch.Tensor | list[torch.Tensor]
+    coco_cat_to_bin: dict = field(default_factory=dict)
+    num_clusters: int = 50
 
     def __len__(self) -> int:
         return len(self.dataset)

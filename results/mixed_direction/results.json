@@ -1,0 +1,90 @@
+{
+  "mascot_pure_inc": {
+    "label": "mascot_pure_inc",
+    "r1": 0.0,
+    "r10": 0.8356,
+    "img_vendi": 0.0,
+    "ext_vendi": 0.0,
+    "mean_vendi": 0.9435,
+    "geo_vendi": 0.9788,
+    "time_vendi": 0.8601,
+    "hm_r10_vendi": 0.886278
+  },
+  "mascot_pure_dec": {
+    "label": "mascot_pure_dec",
+    "r1": 0.0,
+    "r10": 0.941,
+    "img_vendi": 0.0,
+    "ext_vendi": 0.0,
+    "mean_vendi": 0.1881,
+    "geo_vendi": 0.8878,
+    "time_vendi": 0.8083,
+    "hm_r10_vendi": 0.313528
+  },
+  "mascot_geo_inc_time_dec": {
+    "label": "mascot_geo_inc_time_dec",
+    "r1": 0.0,
+    "r10": 0.1167,
+    "img_vendi": 0.0,
+    "ext_vendi": 0.0,
+    "mean_vendi": 0.928,
+    "geo_vendi": 0.962,
+    "time_vendi": 0.7894,
+    "hm_r10_vendi": 0.207328
+  },
+  "mascot_geo_dec_time_inc": {
+    "label": "mascot_geo_dec_time_inc",
+    "r1": 0.0,
+    "r10": 0.0038,
+    "img_vendi": 0.0,
+    "ext_vendi": 0.0,
+    "mean_vendi": 0.9208,
+    "geo_vendi": 0.9005,
+    "time_vendi": 0.8319,
+    "hm_r10_vendi": 0.007569
+  },
+  "msdpp_pure_inc": {
+    "label": "msdpp_pure_inc",
+    "r1": 0.782936,
+    "r10": 0.974906,
+    "img_vendi": 0.938496,
+    "ext_vendi": 0.916508,
+    "mean_vendi": 0.926249,
+    "geo_vendi": 0.943256,
+    "time_vendi": 0.840033,
+    "hm_r10_vendi": 0.949955
+  },
+  "msdpp_pure_dec": {
+    "label": "msdpp_pure_dec",
+    "r1": 0.526976,
+    "r10": 0.838143,
+    "img_vendi": 0.93409,
+    "ext_vendi": 0.177957,
+    "mean_vendi": 0.272056,
+    "geo_vendi": 0.781408,
+    "time_vendi": 0.747406,
+    "hm_r10_vendi": 0.410777
+  },
+  "msdpp_geo_inc_time_dec": {
+    "label": "msdpp_geo_inc_time_dec",
+    "r1": 0.63739,
+    "r10": 0.915935,
+    "img_vendi": 0.941169,
+    "ext_vendi": 0.924544,
+    "mean_vendi": 0.932457,
+    "geo_vendi": 0.972818,
+    "time_vendi": 0.797274,
+    "hm_r10_vendi": 0.924122
+  },
+  "msdpp_geo_dec_time_inc": {
+    "label": "msdpp_geo_dec_time_inc",
+    "r1": 0.574655,
+    "r10": 0.903388,
+    "img_vendi": 0.937813,
+    "ext_vendi": 0.884807,
+    "mean_vendi": 0.908866,
+    "geo_vendi": 0.835857,
+    "time_vendi": 0.837058,
+    "hm_r10_vendi": 0.906118
+  }
+}

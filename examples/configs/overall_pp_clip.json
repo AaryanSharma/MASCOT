@@ -1,0 +1,11 @@
+{
+  "data_name": [
+    "PP_geo_hour"
+  ],
+  "model_name": "clip",
+  "model_params": {
+    "pretrained_model": "openai/clip-vit-large-patch14"
+  },
+  "subset_k": 200,
+  "top_k": 20
+}

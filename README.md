@@ -3,12 +3,14 @@
 # MASCOT: Model-Aware Submodular Coverage for Composite-Attribute Text-to-Image Retrieval
 
 [![ACM MM 2026](https://img.shields.io/badge/ACM%20MM-2026-blue.svg)](https://2026.acmmm.org/)
-[![Submission](https://img.shields.io/badge/Submission%20Id-9126-green.svg)]()
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.5%2B-orange.svg)](https://pytorch.org)
 [![Built on MS-DPP](https://img.shields.io/badge/Built%20on-MS--DPP%20codebase-lightgrey.svg)](https://arxiv.org/abs/2507.06654)
 
 **ACM MM 2026** | Rio de Janeiro, Brazil
+
+**Aaryan Sharma · Vishak Prasad C · Virendra Singh · Ganesh Ramakrishnan**
+Department of Electrical Engineering, Indian Institute of Technology Bombay
 
 </div>
 
@@ -82,16 +84,45 @@ msdpp/
 │   ├── pixelprose_preprocess.py   ← PixelProse download + EXIF filter + GPS/time extraction
 │   ├── vg_preprocess.py           ← Visual Genome (VG_hour) preprocessing
 │   ├── i1m_preprocess.py          ← Incidents1M (I1M_geo) preprocessing + IP geolocation
-│   └── skyscript_preprocess.py    ← SkyScript remote sensing preprocessing
+│   ├── skyscript_preprocess.py    ← SkyScript remote sensing preprocessing
+│   ├── cluster_util.py            ← K-means visual clustering utility
+│   ├── create_pp_visualcluster.py ← Build PP_visualcluster dataset (BLIP-2 features → clusters)
+│   └── add_visual_clusters.py     ← Add cluster IDs to an existing dataset
 ├── examples/
 │   ├── grid_search_eval.py        ← Main evaluation script (grid search over λ, σ)
 │   ├── sensitivity_analysis.py    ← Hyperparameter sensitivity tables
+│   ├── clip_gridsearch.py         ← CLIP backbone generalization (post-submission)
 │   └── configs/
 │       ├── overall.json           ← Dataset/model config (PP variants)
+│       ├── overall_pp_clip.json   ← CLIP backbone config
 │       ├── div_selected.json      ← Method + hyperparameter grid configs
-│       └── tables/                ← Per-task result JSON files (PP_geo, PP_hour, etc.)
-├── results/analysis_vg_i1m.py    ← VG and I1M result analysis
-├── pyproject.toml                 ← Dependencies (uv)
+│       ├── div_clip.json          ← CLIP div-method configs
+│       └── tables/                ← Per-task result JSON files
+├── extensions/                    ← Post-submission extensions (rebuttal + camera-ready)
+│   ├── evaluate_visual_clusters.py    ← Visual cluster metadata (BLIP-2 features → 10 IUs)
+│   ├── mixed_direction_eval.py        ← Per-attribute direction (geo↑+time↓, etc.)
+│   ├── build_fixed_recall_tables.py   ← Max DM at fixed R@10 floors
+│   └── verify_fixed_recall.py         ← Cache verification for fixed_recall
+├── efficiency/                    ← Vectorized runtime + correctness
+│   ├── benchmark_full_pipeline.py     ← End-to-end 2.99 ms benchmark (rebuttal)
+│   └── test_vec_correctness.py        ← Proves search() == search_vec() in float32
+├── prs/                           ← Preference Reflection Score & top-1 integrity analysis
+│   ├── principled_displacement.py     ← Cluster-aware displacement classification (99.2% principled)
+│   ├── threshold_robustness.py        ← Threshold-invariance check for the above
+│   └── top1_integrity.py              ← R@1 preservation sweeps
+├── results/                       ← Result artifacts referenced from the paper & rebuttal
+│   ├── fixed_recall/                  ← fixed_recall_diversity.md
+│   ├── runtime/                       ← runtime_full.json (2.99 ms)
+│   ├── mixed_direction/               ← SUMMARY.md + JSONs
+│   ├── top1_integrity/                ← SUMMARY.md + principled_displacement.json
+│   ├── visual_clusters/               ← final_vc_test.log (rebuttal DM: 0.815→0.869 / 0.420→0.689)
+│   ├── pp_clip/                       ← CLIP backbone SUMMARY.md + tables
+│   └── analysis_vg_i1m.py             ← VG and I1M result analysis
+├── rebuttal/                      ← ACM MM 2026 rebuttal materials
+│   ├── README.md
+│   ├── response.md                    ← Point-by-point response
+│   └── camera_ready_todos.md          ← Tracked revisions for camera-ready
+└── pyproject.toml                 ← Dependencies (uv)
 ```
 
 ---
@@ -331,6 +362,60 @@ python examples/visualize_dataset.py
 
 ---
 
+## Post-Submission Experiments (Rebuttal & Camera-Ready)
+
+The rebuttal cites four experiments not in the original submission. All scripts and result artifacts are included and reproduce the cited numbers exactly. See [`rebuttal/`](rebuttal/) for the full response and camera-ready checklist.
+
+### 1. Visual cluster metadata extension (rebuttal §"Metadata Generality")
+
+Verifies that MASCOT extends beyond geo/time metadata to learned image-embedding clusters.
+
+```bash
+# Preprocess (one-time): induce 10 visual clusters from BLIP-2 embeddings
+python data/create_pp_visualcluster.py --base_dataset_path ./tasks/PP_base --output_path ./tasks --num_clusters 10
+
+# Evaluate MASCOT + MS-DPP + Prob-Coverage on the cluster metadata
+python extensions/evaluate_visual_clusters.py
+# → results/visual_clusters/final_vc_test.log
+# Rebuttal numbers: MASCOT DM 0.815→0.869 (increase), 0.420→0.689 (decrease)
+```
+
+### 2. Vectorized runtime (rebuttal §"Runtime and Memory Usage")
+
+The original submission reported 1266 ms/query. After GPU caching and vectorization, the same objective runs in 2.99 ms/query at N=200, K=20.
+
+```bash
+python efficiency/benchmark_full_pipeline.py
+# → results/runtime/runtime_full.json
+
+# Verify search() and search_vec() produce bit-identical outputs (float32):
+python efficiency/test_vec_correctness.py
+```
+
+### 3. Fixed-recall analysis (rebuttal §"Sensitivity, Dataset Scope, and Fixed-Recall Analysis")
+
+Max DM achievable while holding R@10 above a floor (0.95 / 0.90 / 0.85).
+
+```bash
+python extensions/build_fixed_recall_tables.py
+# → results/fixed_recall/fixed_recall_diversity.md
+```
+
+### 4. CLIP backbone generalization
+
+Reproduces the MS-DPP decrease-collapse and MASCOT recall-preservation results with CLIP ViT-L/14 instead of BLIP-2.
+
+```bash
+python examples/clip_gridsearch.py
+# → results/pp_clip/SUMMARY.md
+```
+
+### Note on runtime vs. accuracy
+
+`search_vec()` is numerically identical to the original `search()` in float32 (verified in `efficiency/test_vec_correctness.py`). Accuracy results reported in the paper use `search()`; the 2.99 ms number is measured on `search_vec()`.
+
+---
+
 ## Adding New Methods
 
 MASCOT integrates into the MS-DPP plugin registry:
@@ -369,12 +454,11 @@ class YourMethod(BaseDiversificationMethod):
 If you use MASCOT in your research, please cite:
 
 ```bibtex
-@inproceedings{mascot2026,
+@inproceedings{sharma2026mascot,
   title={{MASCOT: Model-Aware Submodular Coverage for Composite-Attribute Text-to-Image Retrieval}},
-  author={Anonymous Author(s)},
+  author={Sharma, Aaryan and Prasad C, Vishak and Singh, Virendra and Ramakrishnan, Ganesh},
   booktitle={Proceedings of the 34th ACM International Conference on Multimedia (ACM MM '26)},
-  year={2026},
-  note={Submission Id: 9126}
+  year={2026}
 }
 ```
 

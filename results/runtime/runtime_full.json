@@ -1,0 +1,189 @@
+{
+  "config": {
+    "N_values": [
+      100,
+      200,
+      400
+    ],
+    "K": 20,
+    "warmup": 10,
+    "timed": 100,
+    "device": "cuda",
+    "sigma_geo": 15.0,
+    "sigma_time": 1.5,
+    "grid_size": 20,
+    "num_bins": 24,
+    "timing_unit": "ms per single query (mean over timed queries, warmup excluded)"
+  },
+  "optimizations": [
+    "Pre-loaded GPS/hour/minute tensors: eliminates HF Arrow access per query",
+    "Cached geo+time grid centers: meshgrid/arange computed once per (size, device)",
+    "Pre-folded omega + pre-scaled r_hat in search_vec: removes per-iteration [N,M] multiply",
+    "float16 info matrix: disabled (index mismatch detected)",
+    "MS-DPP reference: torch.linalg.eigh on GPU (matches production dpp.py)"
+  ],
+  "timings": {
+    "100": {
+      "INCREASE": {
+        "search_vec": {
+          "data_access_ms": 0.047949685249477625,
+          "data_access_std": 0.008121484263823477,
+          "iu_compute_ms": 1.366632798453793,
+          "iu_compute_std": 5.936916144269119,
+          "search_ms": 7.325488600181416,
+          "search_std": 9.39465966411402,
+          "total_ms": 8.990808241069317,
+          "total_std": 10.78898216807017,
+          "peak_mem_mb": 0.48281599999999997
+        },
+        "search (seq)": {
+          "data_access_ms": 0.19203595351427794,
+          "data_access_std": 1.2446953167146826,
+          "iu_compute_ms": 0.743737705051899,
+          "iu_compute_std": 1.8040151465342336,
+          "search_ms": 15.435480644227937,
+          "search_std": 12.48568430297448,
+          "total_ms": 16.430449438048527,
+          "total_std": 12.430713942443456,
+          "peak_mem_mb": 0.518656
+        }
+      },
+      "DECREASE": {
+        "search_vec": {
+          "data_access_ms": 0.04621766274794936,
+          "data_access_std": 0.010576006931496719,
+          "iu_compute_ms": 0.7483793538995087,
+          "iu_compute_std": 2.1408612367035285,
+          "search_ms": 3.9707826252561063,
+          "search_std": 5.229946391966172,
+          "total_ms": 4.813196883769706,
+          "total_std": 5.679855779187659,
+          "peak_mem_mb": 0.48281599999999997
+        },
+        "search (seq)": {
+          "data_access_ms": 0.04377944394946098,
+          "data_access_std": 0.005956308385653526,
+          "iu_compute_ms": 0.33519211574457586,
+          "iu_compute_std": 0.024869627704750614,
+          "search_ms": 4.577290576416999,
+          "search_std": 4.083538169409188,
+          "total_ms": 5.0023998285178095,
+          "total_std": 4.086003034397799,
+          "peak_mem_mb": 0.518656
+        }
+      },
+      "msdpp_torch_eigh": {
+        "mean_ms": 1.85550736496225,
+        "std_ms": 0.06336786346996674
+      }
+    },
+    "200": {
+      "INCREASE": {
+        "search_vec": {
+          "data_access_ms": 0.04480011877603829,
+          "data_access_std": 0.007003687027956309,
+          "iu_compute_ms": 0.3542886348441243,
+          "iu_compute_std": 0.20762403282662084,
+          "search_ms": 2.711715870536864,
+          "search_std": 0.8570089827833903,
+          "total_ms": 3.1605584803037345,
+          "total_std": 0.8760298585771851,
+          "peak_mem_mb": 0.9640959999999997
+        },
+        "search (seq)": {
+          "data_access_ms": 0.0441594747826457,
+          "data_access_std": 0.003182188561451457,
+          "iu_compute_ms": 0.3302544797770679,
+          "iu_compute_std": 0.013717281327217504,
+          "search_ms": 4.386166922049597,
+          "search_std": 0.18010577907114933,
+          "total_ms": 4.806497351964936,
+          "total_std": 0.18383253024174614,
+          "peak_mem_mb": 1.029632
+        }
+      },
+      "DECREASE": {
+        "search_vec": {
+          "data_access_ms": 0.044097478967159986,
+          "data_access_std": 0.005409520963633782,
+          "iu_compute_ms": 0.3249376220628619,
+          "iu_compute_std": 0.021107245646517135,
+          "search_ms": 2.576029117917642,
+          "search_std": 0.1810509281822331,
+          "total_ms": 2.9934512835461646,
+          "total_std": 0.21136431925073512,
+          "peak_mem_mb": 0.9640959999999997
+        },
+        "search (seq)": {
+          "data_access_ms": 0.044334508711472154,
+          "data_access_std": 0.006527402770576669,
+          "iu_compute_ms": 0.3344589308835566,
+          "iu_compute_std": 0.02172456570196877,
+          "search_ms": 4.469435766804963,
+          "search_std": 0.2562002833968627,
+          "total_ms": 4.8955076560378075,
+          "total_std": 0.2761845789398079,
+          "peak_mem_mb": 1.029632
+        }
+      },
+      "msdpp_torch_eigh": {
+        "mean_ms": 6.523963192012161,
+        "std_ms": 5.171222317578161
+      }
+    },
+    "400": {
+      "INCREASE": {
+        "search_vec": {
+          "data_access_ms": 0.05711092031560838,
+          "data_access_std": 0.06765115539496695,
+          "iu_compute_ms": 1.103599324123934,
+          "iu_compute_std": 3.081515791180793,
+          "search_ms": 5.597824892029166,
+          "search_std": 5.229221567936089,
+          "total_ms": 6.812217232072726,
+          "total_std": 5.742125646922944,
+          "peak_mem_mb": 1.9276800000000003
+        },
+        "search (seq)": {
+          "data_access_ms": 0.05224430933594704,
+          "data_access_std": 0.010171910833943205,
+          "iu_compute_ms": 0.8436321059707552,
+          "iu_compute_std": 2.2002239577747753,
+          "search_ms": 11.106216203188524,
+          "search_std": 7.1569031638872325,
+          "total_ms": 12.055958203272894,
+          "total_std": 7.196496847726689,
+          "peak_mem_mb": 2.0510720000000005
+        }
+      },
+      "DECREASE": {
+        "search_vec": {
+          "data_access_ms": 0.043359172996133566,
+          "data_access_std": 0.008041255663123456,
+          "iu_compute_ms": 0.4167747381143272,
+          "iu_compute_std": 0.8971487753673444,
+          "search_ms": 4.06690506497398,
+          "search_std": 5.166360151569521,
+          "total_ms": 4.571889517828822,
+          "total_std": 5.257815270893586,
+          "peak_mem_mb": 1.9276800000000003
+        },
+        "search (seq)": {
+          "data_access_ms": 0.05413666716776788,
+          "data_access_std": 0.013733515462124512,
+          "iu_compute_ms": 0.44397487421520054,
+          "iu_compute_std": 0.3164876156062766,
+          "search_ms": 8.16082637058571,
+          "search_std": 5.520440293642509,
+          "total_ms": 8.822648694040254,
+          "total_std": 5.600136480684089,
+          "peak_mem_mb": 2.0510720000000005
+        }
+      },
+      "msdpp_torch_eigh": {
+        "mean_ms": 12.309410076122731,
+        "std_ms": 3.0184467785951994
+      }
+    }
+  }
+}

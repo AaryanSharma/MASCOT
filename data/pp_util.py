@@ -16,6 +16,7 @@ from PIL import Image
 from PIL.Image import UnidentifiedImageError
 
 from msdpp.schema import RetrievalDataset
+from msdpp.data.cluster_util import generate_visual_clusters
 
 warnings.filterwarnings("ignore")
 
@@ -451,3 +452,54 @@ class PixelProsePreprocess:
                 val_path=save_root / f"{k}_val.pkl",
                 test_path=save_root / f"{k}_test.pkl",
             )
+
+    def split_and_save_with_clusters(
+        self,
+        val_dataset: datasets.Dataset,
+        val_captions: list[str],
+        test_dataset: datasets.Dataset,
+        test_captions: list[str],
+        val_labels: dict,
+        test_labels: dict,
+        ext_data: torch.Tensor | list,
+        cluster_ids: torch.Tensor,
+        num_clusters: int,
+        name: str,
+        target_ids: list[int],
+        n_val: int,
+        val_path: Path,
+        test_path: Path,
+    ) -> None:
+        train_idx = target_ids[:n_val]
+        test_idx = target_ids[n_val:]
+
+        train_cluster_ids = cluster_ids[train_idx]
+        test_cluster_ids = cluster_ids[test_idx]
+
+        import torch.nn.functional as F
+        train_ext_data = F.one_hot(train_cluster_ids.long(), num_classes=num_clusters).float()
+        test_ext_data = F.one_hot(test_cluster_ids.long(), num_classes=num_clusters).float()
+
+        val_dataset_ret = RetrievalDataset(
+            name + "_val",
+            val_dataset,
+            val_captions,
+            val_labels,
+            train_ext_data,
+        )
+        val_dataset_ret.num_clusters = num_clusters
+
+        test_dataset_ret = RetrievalDataset(
+            name + "_test",
+            test_dataset,
+            test_captions,
+            test_labels,
+            test_ext_data,
+        )
+        test_dataset_ret.num_clusters = num_clusters
+
+        with val_path.open("wb") as f:
+            torch.save(val_dataset_ret, f)
+
+        with test_path.open("wb") as f:
+            torch.save(test_dataset_ret, f)

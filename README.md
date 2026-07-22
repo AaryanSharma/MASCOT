@@ -9,7 +9,8 @@
 
 **ACM MM 2026** | Rio de Janeiro, Brazil
 
-**Aaryan Sharma · Vishak Prasad C · Virendra Singh · Ganesh Ramakrishnan**
+**Aaryan Sharma · Vishak Prasad C · Virendra Singh · Ganesh Ramakrishnan** 
+
 Department of Electrical Engineering, Indian Institute of Technology Bombay
 
 </div>

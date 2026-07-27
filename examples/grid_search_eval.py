@@ -331,8 +331,12 @@ class Evaluation:
         failure_cases_dir = self.result_dir / "failure_cases"
         failure_cases_dir.mkdir(parents=True, exist_ok=True)
         
-        with open(failure_cases_dir / f"failure_cases_{dataset_name}_{direction_str}_{div_method}.json", "w") as f:
-            json.dump(failure_cases, f, indent=4)      
+        # Include `suffix` so ablation runs (e.g. ma_smf + ablation_no_omega=True)
+        # do not overwrite the full-config file with the same base div_method name.
+        # Previously the filename used only `div_method` -> last group in the sweep
+        # (ablations_no_omega) silently clobbered the full MASCOT per-query file.
+        with open(failure_cases_dir / f"failure_cases_{dataset_name}_{direction_str}_{div_method}{suffix}.json", "w") as f:
+            json.dump(failure_cases, f, indent=4)
 
         # register result
         table_entry = self.gen_table_entry(

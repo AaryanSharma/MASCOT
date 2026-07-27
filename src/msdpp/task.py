@@ -120,10 +120,15 @@ class BaseTask:
                            per_attribute_directions: list[DivDir] | None = None) -> tuple[Path, Path]:
         params = div_method.get_params
         param_str = "_".join([f"{k}_{v}" for k, v in params.items()])
-        data_name_split = data_name.split("_")
-        _data_name = "_".join([data_name_split[0].lower(), data_name_split[1].lower()]) if "pp_" in data_name.lower() else data_name.split("_")[0].lower()
-        if data_name.endswith("val"): _data_name += "_val"
-        if data_name.endswith("test"): _data_name += "_test"
+        # Use the full dataset name (minus the trailing _val/_test split marker) so
+        # composite tasks like PP_geo_hour do not collide with their single-attribute
+        # siblings PP_geo / PP_hour in the rerank cache. The previous version kept
+        # only the first two underscore-separated parts, which mapped both
+        # PP_geo_hour_test and PP_geo_test to `pp_geo_test`, causing whichever task
+        # ran last at a given (theta, sigma_geo, sigma_time) to overwrite the other.
+        split_marker = "_val" if data_name.endswith("val") else ("_test" if data_name.endswith("test") else "")
+        stem = data_name[:-len(split_marker)] if split_marker else data_name
+        _data_name = stem.lower() + split_marker
         rerank_dir = self.cache_home / "rerank"
         rerank_dir.mkdir(exist_ok=True)
         if per_attribute_directions is not None:

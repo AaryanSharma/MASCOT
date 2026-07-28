@@ -17,9 +17,9 @@ SAVE_DIR.mkdir(parents=True, exist_ok=True)
 # ==========================================
 STYLE_MAP = {
     # OURS (Blues) - Thick lines, prominent markers
-    "MASCOT (Ours)":      {"color": "#003f5c", "marker": "*", "ls": "-",  "lw": 3.5, "s": 350, "z": 10},
-    "MASCOT (w/o Norm)":  {"color": "#4292c6", "marker": "X", "ls": "--", "lw": 2.5, "s": 200, "z": 9},
-    "MASCOT (w/o Omega)": {"color": "#9ecae1", "marker": "P", "ls": "--", "lw": 2.5, "s": 200, "z": 9},
+    "MASCOT":      {"color": "#003f5c", "marker": "*", "ls": "-",  "lw": 3.5, "s": 350, "z": 10},
+    "w/o Normalization":  {"color": "#4292c6", "marker": "X", "ls": "--", "lw": 2.5, "s": 200, "z": 9},
+    "Uniform Binning": {"color": "#9ecae1", "marker": "P", "ls": "--", "lw": 2.5, "s": 200, "z": 9},
     
     # MS-DPP FAMILY (Reds/Oranges)
     "MS-DPP":             {"color": "#d73027", "marker": "s", "ls": "-",  "lw": 2.5, "s": 150, "z": 8},
@@ -47,9 +47,9 @@ METHOD_KEYS = {
     "11_msdpp_tn": "MS-DPP + TN",
     "12_msdpp_tn_tvms": "MS-DPP+TN+TVMS", # Unified naming
     "13_prob_coverage": "Prob-Coverage",
-    "14_ma_smf": "MASCOT (Ours)",
-    "15_ma_smf_ablation_no_norm": "MASCOT (w/o Norm)",
-    "16_ma_smf_ablation_no_omega": "MASCOT (w/o Omega)",
+    "14_ma_smf": "MASCOT",
+    "15_ma_smf_ablation_no_norm": "w/o Normalization",
+    "16_ma_smf_ablation_no_omega": "Uniform Binning",
     "17_blip2": "BLIP-2",
     "18_mmr": "MMR",
     "19_clustering": "Clustering"
@@ -115,9 +115,9 @@ DETAILED_METHOD_MAP = {
     "msdpp": "MS-DPP",
     "prob_coverage": "Prob-Coverage",
     "dpp_sim_average": "k-DPP",
-    "ma_smf_ablation_no_norm": "MASCOT (w/o Norm)",
-    "ma_smf_ablation_no_omega": "MASCOT (w/o Omega)",
-    "ma_smf": "MASCOT (Ours)",  
+    "ma_smf_ablation_no_norm": "w/o Normalization",
+    "ma_smf_ablation_no_omega": "Uniform Binning",
+    "ma_smf": "MASCOT",  
     "blip2": "BLIP-2",
     "mmr": "MMR",
     "clustering": "Clustering",

@@ -40,6 +40,8 @@ nohup.out
 !results/**/*.log
 results/**/checkpoint*.json
 results/**/failure_cases_*.json
+# Exception: the 30 corrected per-query rankings are committed as reproducibility artifacts
+!results/failure_cases_corrected/failure_cases_*.json
 
 # IDE
 .vscode/

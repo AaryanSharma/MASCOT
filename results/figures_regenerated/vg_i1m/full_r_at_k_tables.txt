@@ -1,6 +1,6 @@
-/tmp/plot_gen/vg_i1m/analysis_vg_i1m.py:112: UserWarning: You passed a edgecolor/edgecolors ('black') for an unfilled marker ('x').  Matplotlib is ignoring the edgecolor in favor of the facecolor.  This behavior may change in the future.
+/tmp/plot_gen_v3/vg_i1m/analysis_vg_i1m.py:112: UserWarning: You passed a edgecolor/edgecolors ('black') for an unfilled marker ('x').  Matplotlib is ignoring the edgecolor in favor of the facecolor.  This behavior may change in the future.
   ax.scatter(entry["div_index"], entry["ret_index"], label=label,
-/tmp/plot_gen/vg_i1m/analysis_vg_i1m.py:120: UserWarning: You passed a edgecolor/edgecolors ('black') for an unfilled marker ('+').  Matplotlib is ignoring the edgecolor in favor of the facecolor.  This behavior may change in the future.
+/tmp/plot_gen_v3/vg_i1m/analysis_vg_i1m.py:120: UserWarning: You passed a edgecolor/edgecolors ('black') for an unfilled marker ('+').  Matplotlib is ignoring the edgecolor in favor of the facecolor.  This behavior may change in the future.
   ax.scatter(org["div_index"], org["ret_index"], label="Original",
 Saved: figures_vg_i1m/plot_tradeoff_VG_hour_decrease.png
 Saved: figures_vg_i1m/plot_tradeoff_VG_hour_increase.png
@@ -10,29 +10,33 @@ Saved: figures_vg_i1m/plot_tradeoff_I1M_geo_decrease.png
 === EARLY-RANK RECALL: VG_HOUR ===
 
   VG_HOUR_DECREASE
-                  R@1    R@3    R@5   R@10   R@20
-MS-DPP         0.5333 0.7333 0.8667 0.9333 0.9333
-k-DPP          0.2000 0.5333 0.6667 0.9333 1.0000
-BLIP-2         0.2000 0.4667 0.8000 0.8667 1.0000
-MASCOT (Ours)  0.3333 0.6667 0.8667 0.8667 0.9333
-Clustering     0.4000 0.7333 0.8667 0.9333 0.9333
-MS-DPP+TN+TVMS 0.4667 0.8000 0.8000 0.9333 0.9333
-MMR            0.2000 0.6667 0.7333 0.8000 1.0000
-Prob-Coverage  0.2667 0.5333 0.7333 0.8667 0.9333
-MS-DPP + TN    0.4000 0.8000 0.8000 0.9333 0.9333
+                     R@1    R@3    R@5   R@10   R@20
+MS-DPP            0.5333 0.7333 0.8667 0.9333 0.9333
+k-DPP             0.2000 0.5333 0.6667 0.9333 1.0000
+w/o Normalization 0.0667 0.4000 0.8000 0.8667 0.9333
+BLIP-2            0.2000 0.4667 0.8000 0.8667 1.0000
+Uniform Binning   0.3333 0.6667 0.8667 0.8667 0.9333
+MASCOT            0.2000 0.5333 0.8667 0.9333 1.0000
+Clustering        0.4000 0.7333 0.8667 0.9333 0.9333
+MS-DPP+TN+TVMS    0.4667 0.8000 0.8000 0.9333 0.9333
+MMR               0.2000 0.6667 0.7333 0.8000 1.0000
+Prob-Coverage     0.2667 0.5333 0.7333 0.8667 0.9333
+MS-DPP + TN       0.4000 0.8000 0.8000 0.9333 0.9333
 ------------------------------------------------------------
 
   VG_HOUR_INCREASE
-                  R@1    R@3    R@5   R@10   R@20
-MS-DPP         0.2667 0.6000 0.7333 0.8667 0.9333
-MS-DPP + TN    0.2667 0.6000 0.7333 0.8000 1.0000
-k-DPP          0.2000 0.4667 0.8000 0.8667 1.0000
-MMR            0.2000 0.6667 0.7333 0.8000 1.0000
-Clustering     0.5333 0.6667 0.8000 0.8000 1.0000
-MASCOT (Ours)  0.3333 0.6000 0.8000 0.9333 1.0000
-MS-DPP+TN+TVMS 0.2667 0.5333 0.8000 0.8667 1.0000
-Prob-Coverage  0.3333 0.6000 0.8000 0.9333 1.0000
-BLIP-2         0.2000 0.4667 0.8000 0.8667 1.0000
+                     R@1    R@3    R@5   R@10   R@20
+MS-DPP            0.2667 0.6000 0.7333 0.8667 0.9333
+MS-DPP + TN       0.2667 0.6000 0.7333 0.8000 1.0000
+k-DPP             0.2000 0.4667 0.8000 0.8667 1.0000
+MMR               0.2000 0.6667 0.7333 0.8000 1.0000
+Clustering        0.5333 0.6667 0.8000 0.8000 1.0000
+MASCOT            0.3333 0.5333 0.6667 0.8667 1.0000
+w/o Normalization 0.4000 0.5333 0.7333 0.9333 1.0000
+MS-DPP+TN+TVMS    0.2667 0.5333 0.8000 0.8667 1.0000
+Prob-Coverage     0.3333 0.6000 0.8000 0.9333 1.0000
+BLIP-2            0.2000 0.4667 0.8000 0.8667 1.0000
+Uniform Binning   0.3333 0.6000 0.8000 0.9333 1.0000
 ------------------------------------------------------------
 Saved: figures_vg_i1m/plot_recall_VG_hour_decrease.png
 Saved: figures_vg_i1m/plot_recall_VG_hour_increase.png
@@ -40,29 +44,33 @@ Saved: figures_vg_i1m/plot_recall_VG_hour_increase.png
 === EARLY-RANK RECALL: I1M_GEO ===
 
   I1M_GEO_DECREASE
-                  R@1    R@3    R@5   R@10   R@20
-BLIP-2         0.7065 0.9022 0.9348 0.9783 0.9783
-MMR            0.7065 0.9022 0.9565 0.9783 0.9783
-k-DPP          0.7283 0.9022 0.9565 0.9674 0.9891
-Prob-Coverage  0.6630 0.8696 0.9674 0.9783 0.9891
-Clustering     0.6957 0.8478 0.8913 0.9239 0.9783
-MS-DPP         0.6522 0.8478 0.8804 0.9457 0.9891
-MS-DPP+TN+TVMS 0.6522 0.8804 0.9348 0.9674 0.9891
-MS-DPP + TN    0.7283 0.9130 0.9348 0.9565 0.9891
-MASCOT (Ours)  0.6739 0.8804 0.9783 0.9783 0.9891
+                     R@1    R@3    R@5   R@10   R@20
+w/o Normalization 0.7065 0.8696 0.9239 0.9565 0.9783
+BLIP-2            0.7065 0.9022 0.9348 0.9783 0.9783
+MMR               0.7065 0.9022 0.9565 0.9783 0.9783
+k-DPP             0.7283 0.9022 0.9565 0.9674 0.9891
+Uniform Binning   0.6739 0.8804 0.9783 0.9783 0.9891
+Prob-Coverage     0.6630 0.8696 0.9674 0.9783 0.9891
+Clustering        0.6957 0.8478 0.8913 0.9239 0.9783
+MS-DPP            0.6522 0.8478 0.8804 0.9457 0.9891
+MS-DPP+TN+TVMS    0.6522 0.8804 0.9348 0.9674 0.9891
+MS-DPP + TN       0.7283 0.9130 0.9348 0.9565 0.9891
+MASCOT            0.6848 0.8804 0.9239 0.9674 0.9783
 ------------------------------------------------------------
 
   I1M_GEO_INCREASE
-                  R@1    R@3    R@5   R@10   R@20
-MMR            0.7065 0.9022 0.9565 0.9783 0.9783
-MS-DPP         0.7391 0.9130 0.9457 0.9783 0.9891
-Prob-Coverage  0.6739 0.9239 0.9565 0.9783 0.9783
-Clustering     0.6630 0.8804 0.9348 0.9565 0.9783
-MS-DPP + TN    0.6848 0.8804 0.9565 0.9783 0.9891
-MS-DPP+TN+TVMS 0.6848 0.9130 0.9348 0.9783 0.9783
-k-DPP          0.7174 0.9022 0.9565 0.9783 0.9783
-BLIP-2         0.7065 0.9022 0.9348 0.9783 0.9783
-MASCOT (Ours)  0.7065 0.9022 0.9457 0.9674 0.9783
+                     R@1    R@3    R@5   R@10   R@20
+MMR               0.7065 0.9022 0.9565 0.9783 0.9783
+MS-DPP            0.7391 0.9130 0.9457 0.9783 0.9891
+Prob-Coverage     0.6739 0.9239 0.9565 0.9783 0.9783
+Clustering        0.6630 0.8804 0.9348 0.9565 0.9783
+Uniform Binning   0.7065 0.9022 0.9457 0.9674 0.9783
+MS-DPP + TN       0.6848 0.8804 0.9565 0.9783 0.9891
+w/o Normalization 0.7174 0.9239 0.9348 0.9783 0.9891
+MS-DPP+TN+TVMS    0.6848 0.9130 0.9348 0.9783 0.9783
+k-DPP             0.7174 0.9022 0.9565 0.9783 0.9783
+BLIP-2            0.7065 0.9022 0.9348 0.9783 0.9783
+MASCOT            0.6739 0.9348 0.9457 0.9674 0.9891
 ------------------------------------------------------------
 Saved: figures_vg_i1m/plot_recall_I1M_geo_decrease.png
 Saved: figures_vg_i1m/plot_recall_I1M_geo_increase.png

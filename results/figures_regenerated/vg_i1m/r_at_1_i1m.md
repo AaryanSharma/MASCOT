@@ -1,6 +1,4 @@
-# Incidents1M (I1M_geo) — Exact R@1 Values
-
-Source: analysis_vg_i1m.py / failure_cases_run2/analysis.py stdout (Part 2, per-query R@K).
+# Incidents1M — Exact R@1 (regenerated after bug #1+#2 fix)
 
 | Method | I1M_GEO_DECREASE | I1M_GEO_INCREASE |
 |---|---|---|
@@ -12,4 +10,6 @@ Source: analysis_vg_i1m.py / failure_cases_run2/analysis.py stdout (Part 2, per-
 | MS-DPP + TN | 0.7283 | 0.6848 |
 | MS-DPP+TN+TVMS | 0.6522 | 0.6848 |
 | Prob-Coverage | 0.6630 | 0.6739 |
-| MASCOT (Ours) | 0.6739 | 0.7065 |
+| w/o Normalization | 0.7065 | 0.7174 |
+| Uniform Binning | 0.6739 | 0.7065 |
+| MASCOT | 0.6848 | 0.6739 |

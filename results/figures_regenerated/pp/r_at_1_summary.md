@@ -1,6 +1,4 @@
-# PixelProse (PP) — Exact R@1 Values
-
-Source: analysis_vg_i1m.py / failure_cases_run2/analysis.py stdout (Part 2, per-query R@K).
+# PixelProse — Exact R@1 (regenerated after bug #1+#2 fix)
 
 | Method | PP_GEO_DECREASE | PP_GEO_HOUR_DECREASE | PP_GEO_HOUR_INCREASE | PP_GEO_INCREASE | PP_HOUR_DECREASE | PP_HOUR_INCREASE |
 |---|---|---|---|---|---|---|
@@ -12,4 +10,6 @@ Source: analysis_vg_i1m.py / failure_cases_run2/analysis.py stdout (Part 2, per-
 | MS-DPP + TN | 0.4605 | 0.5859 | 0.7528 | 0.6412 | 0.5709 | 0.7026 |
 | MS-DPP+TN+TVMS | 0.4316 | 0.5609 | 0.7390 | 0.6688 | 0.5872 | 0.7666 |
 | Prob-Coverage | 0.7867 | 0.6750 | 0.7654 | 0.7842 | 0.7553 | 0.7629 |
-| MASCOT (Ours) | 0.7905 | 0.7528 | 0.6211 | 0.7792 | 0.7854 | 0.7691 |
+| w/o Normalization | 0.4065 | 0.2083 | 0.6336 | 0.0213 | 0.2158 | 0.6888 |
+| Uniform Binning | 0.7905 | 0.7528 | 0.6211 | 0.7792 | 0.7854 | 0.7691 |
+| MASCOT | 0.6048 | 0.7202 | 0.7578 | 0.7553 | 0.6688 | 0.7227 |

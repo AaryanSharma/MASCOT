@@ -91,8 +91,8 @@ def compute_omega(info, r_hat):
 
 
 def rerank_cache_path(ds_name, theta, sigma_geo, sigma_time):
-    parts = ds_name.lower().split("_")
-    data_tag = "_".join(parts[:2]) + "_test"
+    # Match task.py:_cache_rerank_path — use the full stem, not truncated first-2-parts.
+    data_tag = ds_name.lower() + "_test"
     param_str = (f"theta_{theta}_sigma_geo_{sigma_geo}_sigma_time_{sigma_time}"
                  "_no_norm_False_no_omega_False")
     return RERANK_DIR / f"{MODEL_PREFIX}_{data_tag}_decrease_ma_smf_{param_str}.pkl"

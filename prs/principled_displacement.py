@@ -95,12 +95,9 @@ def compute_omega(info: torch.Tensor, r_hat: torch.Tensor) -> torch.Tensor:
 
 def rerank_cache_path(ds_name: str, theta: float,
                       sigma_geo: float, sigma_time: float) -> Path:
-    name_parts = ds_name.lower().split("_")
-    if ds_name.lower().startswith("pp_"):
-        data_tag = "_".join(name_parts[:2])   # "pp_geo", "pp_hour", "pp_geo" (for pp_geo_hour → "pp_geo")
-    else:
-        data_tag = name_parts[0]
-    data_tag += "_test"
+    # Match task.py:_cache_rerank_path: use the full dataset stem so
+    # PP_geo_hour does NOT truncate to pp_geo (which was the pre-fix behavior).
+    data_tag = ds_name.lower() + "_test"
     param_str = (f"theta_{theta}_sigma_geo_{sigma_geo}_sigma_time_{sigma_time}"
                  "_no_norm_False_no_omega_False")
     fname = f"{MODEL_PREFIX}_{data_tag}_decrease_ma_smf_{param_str}.pkl"

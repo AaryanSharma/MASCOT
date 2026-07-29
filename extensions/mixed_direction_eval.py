@@ -213,34 +213,38 @@ def main():
         num_bins=NUM_BINS,
     )
 
-    # MASCOT results pre-filled from completed run (regressions both PASSED)
-    results = {
-        "mascot_pure_inc": {
-            "label": "mascot_pure_inc", "r1": 0.0, "r10": 0.8356,
-            "img_vendi": 0.0, "ext_vendi": 0.0, "mean_vendi": 0.9435,
-            "geo_vendi": 0.9788, "time_vendi": 0.8601,
-            "hm_r10_vendi": round(2*0.8356*0.9435/(0.8356+0.9435), 6),
-        },
-        "mascot_pure_dec": {
-            "label": "mascot_pure_dec", "r1": 0.0, "r10": 0.9410,
-            "img_vendi": 0.0, "ext_vendi": 0.0, "mean_vendi": 0.1881,
-            "geo_vendi": 0.8878, "time_vendi": 0.8083,
-            "hm_r10_vendi": round(2*0.9410*0.1881/(0.9410+0.1881), 6),
-        },
-        "mascot_geo_inc_time_dec": {
-            "label": "mascot_geo_inc_time_dec", "r1": 0.0, "r10": 0.1167,
-            "img_vendi": 0.0, "ext_vendi": 0.0, "mean_vendi": 0.9280,
-            "geo_vendi": 0.9620, "time_vendi": 0.7894,
-            "hm_r10_vendi": round(2*0.1167*0.9280/(0.1167+0.9280), 6),
-        },
-        "mascot_geo_dec_time_inc": {
-            "label": "mascot_geo_dec_time_inc", "r1": 0.0, "r10": 0.0038,
-            "img_vendi": 0.0, "ext_vendi": 0.0, "mean_vendi": 0.9208,
-            "geo_vendi": 0.9005, "time_vendi": 0.8319,
-            "hm_r10_vendi": round(2*0.0038*0.9208/(0.0038+0.9208), 6),
-        },
-    }
-    logger.info("=== MASCOT (ma_smf) — results loaded from prior run (all regressions PASSED) ===")
+    # ── MASCOT experiments (run fresh — the previous version hardcoded
+    #    r1=0.0 as a placeholder that shipped unfilled) ────────────────────
+    logger.info("=== MASCOT (ma_smf) ===")
+    results = {}
+
+    mascot_inc = ModelAwareSubmodularMethod(**MASCOT_INC_PARAMS)
+    r, cands_mascot_inc = run_config(task, mascot_inc, DivDir.INCREASE, "mascot_pure_inc", logger=logger)
+    results["mascot_pure_inc"] = r
+
+    mascot_dec = ModelAwareSubmodularMethod(**MASCOT_DEC_PARAMS)
+    r, cands_mascot_dec = run_config(task, mascot_dec, DivDir.DECREASE, "mascot_pure_dec", logger=logger)
+    results["mascot_pure_dec"] = r
+
+    # regression checks for MASCOT
+    logger.info("  Regression checks …")
+    _, cands_mascot_ii = run_config(task, mascot_inc, DivDir.INCREASE, "mascot_[inc,inc]",
+                                     per_attribute_directions=[DivDir.INCREASE, DivDir.INCREASE], logger=logger)
+    check_regression(cands_mascot_inc, cands_mascot_ii, "MASCOT [INC,INC] == pure INCREASE")
+
+    _, cands_mascot_dd = run_config(task, mascot_dec, DivDir.DECREASE, "mascot_[dec,dec]",
+                                     per_attribute_directions=[DivDir.DECREASE, DivDir.DECREASE], logger=logger)
+    check_regression(cands_mascot_dec, cands_mascot_dd, "MASCOT [DEC,DEC] == pure DECREASE")
+
+    # mixed configs at MIX theta
+    mascot_mix = ModelAwareSubmodularMethod(**MASCOT_MIX_PARAMS)
+    r, _ = run_config(task, mascot_mix, DivDir.INCREASE, "mascot_geo_inc_time_dec",
+                       per_attribute_directions=[DivDir.INCREASE, DivDir.DECREASE], logger=logger)
+    results["mascot_geo_inc_time_dec"] = r
+
+    r, _ = run_config(task, mascot_mix, DivDir.INCREASE, "mascot_geo_dec_time_inc",
+                       per_attribute_directions=[DivDir.DECREASE, DivDir.INCREASE], logger=logger)
+    results["mascot_geo_dec_time_inc"] = r
 
     # ── MS-DPP experiments ─────────────────────────────────────────────────
     logger.info("=== MS-DPP (msdpp) ===")

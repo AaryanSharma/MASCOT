@@ -50,45 +50,64 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sensitivity")
 
 # ------------------------------------------------------------------
-# Dataset → best-known fixed params (from grid-search results)
-# Adjust these after running grid_search_eval.py.
+# Dataset → best-known fixed params (from Table 1/2 val-best hyperparameters)
+#
+# CHANGED: was a single "best_*" per dataset, applied to BOTH directions.
+# That's wrong: PP_geo_hour_decrease and PP_geo_hour_increase have DIFFERENT
+# val-best σ. Sweeping at a per-DATASET fixed σ characterizes a regime that
+# is at neither direction's actual operating point.
+#
+# Now split into best_*_decrease and best_*_increase per method; the sweep
+# runner picks the one matching the direction argument at call time.
+# See results/sensitivity_v2/SUMMARY.md for the corrected σ-dependent-cliff
+# findings that this restructure produced.
 # ------------------------------------------------------------------
 DATASET_META = {
-    # dataset_name: {
-    #   data_is_pp, retrieval_metric,
-    #   best_ma_smf, best_prob_coverage
-    # }
     "PP_geo": {
         "data_is_pp": True,
         "retrieval_metric": "r10",
-        "best_ma_smf":       {"theta": 0.5, "sigma_geo": 10.0, "sigma_time": 0.5,  "grid_size": 20, "num_bins": 24},
-        "best_prob_coverage": {"theta": 0.4, "sigma_geo": 10.0, "sigma_time": 0.5,  "grid_size": 20, "num_bins": 24},
+        # MASCOT decrease: θ=0.3 σ_geo=10 σ_time=0.5 → R@10=0.8105 (Table 1)
+        # MASCOT increase: θ=0.8 σ_geo=15 σ_time=0.5 → R@10=0.9109 (Table 2)
+        "best_ma_smf_decrease":  {"theta": 0.3, "sigma_geo": 10.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_increase":  {"theta": 0.8, "sigma_geo": 15.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_decrease": {"theta": 0.1, "sigma_geo": 10.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_increase": {"theta": 0.1, "sigma_geo": 10.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
     },
     "PP_hour": {
         "data_is_pp": True,
         "retrieval_metric": "r10",
-        "best_ma_smf":       {"theta": 0.5, "sigma_geo": 1.0,  "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
-        "best_prob_coverage": {"theta": 0.4, "sigma_geo": 1.0,  "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
+        # MASCOT decrease: θ=0.4 σ_geo=1 σ_time=0.5 → R@10=0.9059
+        # MASCOT increase: θ=0.9 σ_geo=1 σ_time=1.5 → R@10=0.8921
+        "best_ma_smf_decrease":  {"theta": 0.4, "sigma_geo": 1.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_increase":  {"theta": 0.9, "sigma_geo": 1.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_decrease": {"theta": 0.1, "sigma_geo": 1.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_increase": {"theta": 0.1, "sigma_geo": 1.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
     },
     "PP_geo_hour": {
         "data_is_pp": True,
         "retrieval_metric": "r10",
-        "best_ma_smf":                {"theta": 0.5, "sigma_geo": 10.0, "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
-        "best_ma_smf_decrease":       {"theta": 0.1, "sigma_geo": 10.0, "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
-        "best_prob_coverage":          {"theta": 0.4, "sigma_geo": 10.0, "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
-        "best_prob_coverage_decrease": {"theta": 0.5, "sigma_geo": 10.0, "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
+        # MASCOT decrease: θ=0.1 σ_geo=15 σ_time=3.0 → R@10=0.9410 (Table 1 flagship)
+        # MASCOT increase: θ=0.8 σ_geo=15 σ_time=1.5 → R@10=0.8356
+        "best_ma_smf_decrease":  {"theta": 0.1, "sigma_geo": 15.0, "sigma_time": 3.0, "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_increase":  {"theta": 0.8, "sigma_geo": 15.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_decrease": {"theta": 0.5, "sigma_geo": 10.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_increase": {"theta": 0.4, "sigma_geo": 10.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
     },
     "VG_hour": {
         "data_is_pp": True,
         "retrieval_metric": "r10",
-        "best_ma_smf":       {"theta": 0.5, "sigma_geo": 1.0,  "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
-        "best_prob_coverage": {"theta": 0.4, "sigma_geo": 1.0,  "sigma_time": 1.5,  "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_decrease":  {"theta": 0.4, "sigma_geo": 1.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_increase":  {"theta": 0.7, "sigma_geo": 1.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_decrease": {"theta": 0.4, "sigma_geo": 1.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_increase": {"theta": 0.4, "sigma_geo": 1.0, "sigma_time": 1.5, "grid_size": 20, "num_bins": 24},
     },
     "I1M_geo": {
         "data_is_pp": False,
         "retrieval_metric": "map_",
-        "best_ma_smf":       {"theta": 0.7, "sigma_geo": 5.0,  "sigma_time": 0.5,  "grid_size": 20, "num_bins": 24},
-        "best_prob_coverage": {"theta": 0.2, "sigma_geo": 10.0, "sigma_time": 0.5,  "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_decrease":  {"theta": 0.7, "sigma_geo": 5.0,  "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_ma_smf_increase":  {"theta": 0.7, "sigma_geo": 10.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_decrease": {"theta": 0.2, "sigma_geo": 10.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
+        "best_prob_coverage_increase": {"theta": 0.2, "sigma_geo": 10.0, "sigma_time": 0.5, "grid_size": 20, "num_bins": 24},
     },
     "Flickr30k_geo_hour": {
         "data_is_pp": False,
@@ -239,7 +258,10 @@ def main() -> None:
     parser.add_argument("--method", default="both",
                         choices=["ma_smf", "prob_coverage", "both"])
     parser.add_argument("--config_dir", default="examples/configs")
-    parser.add_argument("--result_dir", default="results/sensitivity")
+    parser.add_argument("--result_dir", default="results/sensitivity_v2",
+                        help="Output directory. Default is sensitivity_v2 (the "
+                             "per-direction sweeps that supersede the old "
+                             "results/sensitivity/ single-per-dataset σ sweeps).")
     parser.add_argument("--n_thread", type=int, default=8,
                         help="Threads for parallelising across queries (default: 8). "
                              "Max useful = min(n_queries, n_cpu_cores). "
@@ -267,10 +289,14 @@ def main() -> None:
         test_task = load_task(dataset_name, "test", hf_home, overall_cfg, n_thread=args.n_thread)
 
         for method in methods:
-            best_key = f"best_{method}"
-            best_params = meta[best_key].copy()
+            # DATASET_META was restructured to per-direction hyperparameters
+            # (best_{method}_increase / best_{method}_decrease). Older versions
+            # of this script also accepted a shared "best_{method}" fallback.
+            inc_key = f"best_{method}_increase"
             dec_key = f"best_{method}_decrease"
-            best_params_decrease = meta[dec_key].copy() if dec_key in meta else None
+            legacy_key = f"best_{method}"
+            best_params = (meta[inc_key] if inc_key in meta else meta[legacy_key]).copy()
+            best_params_decrease = (meta[dec_key] if dec_key in meta else meta.get(legacy_key, {})).copy()
 
             for axis in axes:
                 # Skip geo-only axes for time-only datasets and vice-versa

@@ -127,8 +127,33 @@ def build_secondary_points(dataset: str, direction: str):
 
 # ─── table formatting helpers ─────────────────────────────────────────────────
 
-def table_A(ma_pts, prob_pts, tvms_pts, blip2, recall_floors, direction):
-    """Best achievable DM at fixed R@10 recall floor."""
+def _load_msdpp_point(dataset: str, direction: str):
+    """Single-point MS-DPP operating point read from the paper's table for this cell."""
+    from pathlib import Path
+    import json as _json
+    task = f"{dataset}_{direction}"
+    for tbl_root in (
+        Path("results/failure_cases_run2/tables"),
+        Path("results/vg/tables"),
+        Path("results/i1m/tables"),
+    ):
+        p = tbl_root / f"{task}.json"
+        if p.exists():
+            row = _json.loads(p.read_text())["results"].get("10_msdpp")
+            if row:
+                return {"config": "Table 1 val-best",
+                        "r10": row["r10"], "mean_vendi": row["mean_vendi"]}
+    return None
+
+
+def table_A(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, recall_floors, direction):
+    """Best achievable DM at fixed R@10 recall floor.
+
+    Each method row uses only operating points whose r10 meets the floor.
+    Cells become '—' when no point qualifies. Fixes the prior bug where an
+    MS-DPP row was manually inserted into the .md with a single Table-1 point
+    (r10=0.4931) shown at every floor even when it met none of them.
+    """
     lines = []
     lines.append("| Method | " + " | ".join(f"R@10 ≥ {f:.2f}" for f in recall_floors) + " |")
     lines.append("|---|" + "|".join("---|" for _ in recall_floors))
@@ -139,6 +164,8 @@ def table_A(ma_pts, prob_pts, tvms_pts, blip2, recall_floors, direction):
     ]
     if blip2:
         rows.append(("BLIP-2 (baseline)", [blip2]))
+    if msdpp_pt:
+        rows.append(("MS-DPP", [msdpp_pt]))
     if tvms_pts:
         rows.append(("MS-DPP-TN-TVMS", tvms_pts))
 
@@ -157,7 +184,7 @@ def table_A(ma_pts, prob_pts, tvms_pts, blip2, recall_floors, direction):
     return "\n".join(lines), notes
 
 
-def table_B(ma_pts, prob_pts, tvms_pts, blip2, dm_floors, direction):
+def table_B(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, dm_floors, direction):
     """Best achievable R@10 at fixed diversity floor."""
     lines = []
     lines.append("| Method | " + " | ".join(f"DM ≥ {f:.2f}" for f in dm_floors) + " |")
@@ -168,6 +195,8 @@ def table_B(ma_pts, prob_pts, tvms_pts, blip2, dm_floors, direction):
         ("Both-Ablated (prob\\_cov)", prob_pts),
         ("BLIP-2 (baseline)", [blip2] if blip2 else []),
     ]
+    if msdpp_pt:
+        rows.append(("MS-DPP", [msdpp_pt]))
     if tvms_pts:
         rows.append(("MS-DPP-TN-TVMS", tvms_pts))
 
@@ -211,13 +240,14 @@ for direction in ("decrease", "increase"):
         recall_floors = [0.95, 0.90, 0.85]
         dm_floors_B   = [0.93, 0.94, 0.95]
 
-    tA, notesA = table_A(ma_pts, prob_pts, tvms_pts, blip2, recall_floors, direction)
+    msdpp_pt = _load_msdpp_point("PP_geo_hour", direction)
+    tA, notesA = table_A(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, recall_floors, direction)
     sections.append("\n**Table A — Best achievable DM at fixed R@10 recall floor**\n")
     sections.append(tA)
     if notesA:
         sections.append("\n" + " ".join(notesA))
 
-    tB, notesB = table_B(ma_pts, prob_pts, tvms_pts, blip2, dm_floors_B, direction)
+    tB, notesB = table_B(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, dm_floors_B, direction)
     sections.append("\n**Table B — Best achievable R@10 at fixed diversity floor**\n")
     sections.append(tB)
 
@@ -238,11 +268,12 @@ for direction in ("decrease", "increase"):
         recall_floors = [0.95, 0.90, 0.85]
         dm_floors_B   = [0.93, 0.94, 0.95]
 
-    tA, notesA = table_A(ma_pts, prob_pts, tvms_pts, blip2, recall_floors, direction)
+    msdpp_pt = _load_msdpp_point("PP_geo", direction)
+    tA, notesA = table_A(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, recall_floors, direction)
     sections.append("\n**Table A — Best achievable DM at fixed R@10 recall floor**\n")
     sections.append(tA)
 
-    tB, notesB = table_B(ma_pts, prob_pts, tvms_pts, blip2, dm_floors_B, direction)
+    tB, notesB = table_B(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, dm_floors_B, direction)
     sections.append("\n**Table B — Best achievable R@10 at fixed diversity floor**\n")
     sections.append(tB)
 
@@ -263,11 +294,12 @@ for direction in ("decrease", "increase"):
         recall_floors = [0.95, 0.90, 0.85]
         dm_floors_B   = [0.93, 0.94, 0.95]
 
-    tA, notesA = table_A(ma_pts, prob_pts, tvms_pts, blip2, recall_floors, direction)
+    msdpp_pt = _load_msdpp_point("PP_hour", direction)
+    tA, notesA = table_A(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, recall_floors, direction)
     sections.append("\n**Table A — Best achievable DM at fixed R@10 recall floor**\n")
     sections.append(tA)
 
-    tB, notesB = table_B(ma_pts, prob_pts, tvms_pts, blip2, dm_floors_B, direction)
+    tB, notesB = table_B(ma_pts, prob_pts, tvms_pts, blip2, msdpp_pt, dm_floors_B, direction)
     sections.append("\n**Table B — Best achievable R@10 at fixed diversity floor**\n")
     sections.append(tB)
 

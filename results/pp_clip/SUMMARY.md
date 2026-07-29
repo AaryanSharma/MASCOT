@@ -47,5 +47,18 @@ MASCOT (CLIP, decrease): R@10=0.9762, DM=0.2010
 
 ## Rebuttal paragraph
 
-**Headline claim generalizes**: With CLIP (ViT-L/14), vanilla MS-DPP R@10 collapses to 0.3802 on decrease tasks — matching the BLIP-2 collapse to 0.4931. MASCOT preserves R@10=0.9762 with CLIP vs 0.9410 with BLIP-2. MASCOT Pareto-dominates all MS-DPP variants on decrease with CLIP, reproducing the paper's headline finding with an architecturally distinct single-vector backbone.
+**Headline claim generalizes; Pareto claim does not.** With CLIP (ViT-L/14),
+vanilla MS-DPP R@10 collapses to **0.3802** on the PP_geo_hour decrease task —
+matching the BLIP-2 collapse to 0.4931. MASCOT preserves recall at
+**R@10 = 0.9762** with CLIP (vs 0.9410 with BLIP-2). The recall-preservation
+result is therefore backbone-agnostic.
+
+MASCOT does **not** Pareto-dominate all MS-DPP variants under CLIP: at
+(0.9762, 0.2010) it is not strictly dominated by any variant, but neither
+does it dominate MS-DPP-TN (0.9636, 0.2271) or MS-DPP-TN-TVMS (0.9172, 0.2278) —
+those variants trade lower recall for higher DM. The trade-off is
+Pareto-comparable, not Pareto-dominant. The paper's central claim (recall
+protection under diversity-decrease) reproduces; the earlier draft's
+"MASCOT Pareto-dominates" statement in this section contradicted the
+analysis above and is retracted here.
 

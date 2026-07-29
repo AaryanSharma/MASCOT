@@ -9,9 +9,10 @@
 
 **ACM MM 2026** | Rio de Janeiro, Brazil
 
-**Aaryan Sharma · Vishak Prasad C · Virendra Singh · Ganesh Ramakrishnan** 
+**Aaryan Sharma¹ · Vishak Prasad C² · Virendra Singh¹ · Ganesh Ramakrishnan²**
 
-Department of Electrical Engineering, Indian Institute of Technology Bombay
+¹Department of Electrical Engineering · ²Department of Computer Science and Engineering
+Indian Institute of Technology Bombay
 
 </div>
 
@@ -30,9 +31,9 @@ While manifold-based methods (MS-DPP) excel at *increasing* diversity via spatia
 | PP_geo_hour (Decrease) | R@10 | 0.4931 | **0.9410** |
 | PP_hour (Decrease) | R@10 | 0.7654 | **0.9059** |
 | PP_geo (Decrease) | R@10 | 0.7704 | **0.8105** |
-| Average (Decrease) | R@10 | 67.63% | **83.98%** |
+| Average (Decrease) | R@10 | 67.63% | **88.58%** |
 
-MASCOT matches MS-DPP performance on **increase** tasks while fundamentally outperforming it on **decrease** tasks.
+MASCOT preserves early-rank recall in the decrease regime — MS-DPP's manifold repulsion collapses R@10 from >0.97 to 0.49 on the composite PP_geo_hour decrease task, whereas MASCOT maintains 0.94. On the harmonic mean of R@10 and Diversity Index, the coverage ablations (Uniform Binning, Prob-Coverage) reach comparable or higher scores than full MASCOT on these decrease tasks; MASCOT's contribution is the recall protection under diversity-decrease constraints, not universal HM dominance.
 
 ---
 
@@ -45,7 +46,7 @@ MASCOT matches MS-DPP performance on **increase** tasks while fundamentally outp
    - **Normalized Semantic Relevance (R-hat)**: Local min-max normalization of VLM cosine scores to compete against cumulative coverage sums.
    - **Query-Driven Bin Importance (Ω)**: Dynamic bin weights equal to peak relevance within each bin — prevents wasting retrieval budget on empty or irrelevant bins.
 
-3. **Semantic-Safe Diversity Decrease**: MASCOT is the only method capable of both increasing and decreasing diversity without triggering recall collapse.
+3. **Recall-Preserving Diversity Decrease**: MASCOT preserves early-rank recall (R@10) under diversity-decrease constraints where manifold repulsion (MS-DPP) collapses it. This is MASCOT's targeted contribution; ablations of MASCOT (Uniform Binning, Prob-Coverage) achieve comparable or higher harmonic mean on these tasks — recall protection is the differentiator, not universal HM dominance.
 
 ---
 
@@ -116,13 +117,19 @@ msdpp/
 │   ├── runtime/                       ← runtime_full.json (2.99 ms)
 │   ├── mixed_direction/               ← SUMMARY.md + JSONs
 │   ├── top1_integrity/                ← SUMMARY.md + principled_displacement.json
-│   ├── visual_clusters/               ← final_vc_test.log (rebuttal DM: 0.815→0.869 / 0.420→0.689)
+│   ├── visual_clusters/               ← final_vc_test.log (10-cluster run: DM 0.815→0.869 inc, 0.420→0.689 dec)
 │   ├── pp_clip/                       ← CLIP backbone SUMMARY.md + tables
+│   ├── sensitivity_v2/                ← Per-direction θ sweeps at Table 1 val-best σ (supersedes results/sensitivity/)
+│   ├── figures_regenerated/           ← Recall@K + trade-off plots after bug #1+#2 fixes
+│   ├── failure_cases_corrected/       ← Per-query MASCOT/UB/no_norm rankings (30 files, verified against Table 1/2/9/10/11)
+│   ├── _stale_pre_fix/                ← Documentation of the mislabeled failure_cases files from the pre-fix pipeline
 │   └── analysis_vg_i1m.py             ← VG and I1M result analysis
 ├── rebuttal/                      ← ACM MM 2026 rebuttal materials
 │   ├── README.md
 │   ├── response.md                    ← Point-by-point response
-│   └── camera_ready_todos.md          ← Tracked revisions for camera-ready
+│   ├── camera_ready_todos.md          ← Tracked revisions for camera-ready
+│   └── appendix_hyperparameters.md    ← Per-(task, direction, method) hyperparameter table for Appendix D
+├── scripts/                       ← Reproducibility scripts (regen failure_cases + sensitivity sweeps)
 └── pyproject.toml                 ← Dependencies (uv)
 ```
 
@@ -301,17 +308,30 @@ Both use Gaussian kernels: `p(u, i) = exp(-dist² / 2σ²)`, with probabilities 
 
 ## Hyperparameters
 
-Best hyperparameters (tuned on val split, fixed at test):
+Val-best MASCOT hyperparameters per (task, direction). σ_geo is in **degrees**
+(distance is Euclidean in lat/lon degree-space; see `get_geo_iu_probs` in
+`src/msdpp/data.py`). σ_time is in hours.
 
-| Parameter | PP_geo | PP_hour | PP_geo_hour |
-|---|---|---|---|
-| λ (theta) | 0.3 | 0.3 | 0.3–0.5 |
-| σ_geo | 10.0 | — | 10.0 |
-| σ_time | — | 1.5 | 1.5 |
-| Grid size | 20 | — | 20 |
-| Num time bins | — | 24 | 24 |
+| Task | Direction | λ (θ) | σ_geo | σ_time | grid | R@10 |
+|---|---|---|---|---|---|---|
+| PP_geo | decrease | 0.3 | 10.0 | 0.5 | 20 | 0.8105 |
+| PP_geo | increase | 0.8 | 15.0 | 0.5 | 20 | 0.9109 |
+| PP_hour | decrease | 0.4 | 1.0 | 0.5 | — | 0.9059 |
+| PP_hour | increase | 0.9 | 1.0 | 1.5 | — | 0.8921 |
+| PP_geo_hour | decrease | **0.1** | 15.0 | 3.0 | 20 | 0.9410 |
+| PP_geo_hour | increase | 0.8 | 15.0 | 1.5 | 20 | 0.8356 |
 
-Sensitivity tables (Tables 5–8) show MASCOT is robust across σ_geo ∈ [0.5, 2.0] and σ_time ∈ [1.0, 3.0].
+Full per-method (MASCOT / Uniform Binning / w/o Normalization) hyperparameter
+table for all datasets is in [`rebuttal/appendix_hyperparameters.md`](rebuttal/appendix_hyperparameters.md).
+
+**Sensitivity to λ is σ-dependent, not fixed.** At each task's val-best σ,
+the corrected θ sweeps in [`results/sensitivity_v2/SUMMARY.md`](results/sensitivity_v2/SUMMARY.md)
+show every decrease-task operating point sits one grid step above a hard
+recall cliff (e.g. PP_geo_hour_dec at θ=0.1 gives R@10=0.9410; at θ=0.2 it
+collapses to 0.0477). The earlier claim of a wide stable λ range was based
+on stale sensitivity sweeps at σ values that did not match the Table 1
+val-best; see [`results/sensitivity_v2/SUMMARY.md`](results/sensitivity_v2/SUMMARY.md)
+for the reconciled per-direction findings.
 
 ---
 
@@ -325,7 +345,7 @@ Sensitivity tables (Tables 5–8) show MASCOT is robust across σ_geo ∈ [0.5, 
 | Combined | **HM (Overall Score)** | Harmonic Mean of R@10 and Div Index |
 | Controllability | **PRS** | Preference Reflection Score — monotonicity of Div Index as λ sweeps 0→1 |
 
-In **decrease** tasks: lower Div Index = better. In **increase** tasks: higher Div Index = better.
+In **increase** tasks, higher Div Index = better. In **decrease** tasks, the paper reports the transformed metric `1 − DM` so that higher is always better in both directions (see Appendix G.3). The raw `mean_vendi` field in `tables/*.json` is untransformed; downstream `1−DM` conversion happens at the harmonic-mean step.
 
 ---
 
@@ -358,8 +378,17 @@ python results/analysis_vg_i1m.py
 ### Figure 1 (Recall@K curves)
 
 ```bash
-python examples/visualize_dataset.py
+# PP datasets — recall curves + trade-off scatter
+cd results/failure_cases_run2/
+python analysis.py
+
+# VG_hour + I1M_geo — recall curves + trade-off scatter
+cd ../
+python analysis_vg_i1m.py
 ```
+
+Curves are written under `figures/` and `figures_vg_i1m/` respectively.
+`visualize_dataset.py` was a scratch script, not the figure generator.
 
 ---
 

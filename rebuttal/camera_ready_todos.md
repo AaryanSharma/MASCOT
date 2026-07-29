@@ -27,7 +27,9 @@ Tracks concrete edits promised in the rebuttal. Each item lists the source conce
 
 ## De-anonymization (post-acceptance)
 
-- [ ] Update author list on title page: Aaryan Sharma, Virendra Singh, Ganesh Ramakrishnan
-- [ ] Add affiliation: Department of Electrical Engineering, Indian Institute of Technology Bombay
+- [ ] Update author list on title page: **Aaryan Sharma¹, Vishak Prasad C², Virendra Singh¹, Ganesh Ramakrishnan²**
+- [ ] Add affiliations:
+      ¹ Department of Electrical Engineering, Indian Institute of Technology Bombay
+      ² Department of Computer Science and Engineering, Indian Institute of Technology Bombay
 - [ ] Update Appendix H code link: `anonymous.4open.science/r/MASCOT-8D32/` → `github.com/AaryanSharma/MASCOT`
 - [ ] Update BibTeX in README/citation with real DOI once assigned

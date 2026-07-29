@@ -1,47 +1,47 @@
 {
   "mascot_pure_inc": {
     "label": "mascot_pure_inc",
-    "r1": 0.0,
-    "r10": 0.8356,
-    "img_vendi": 0.0,
-    "ext_vendi": 0.0,
-    "mean_vendi": 0.9435,
-    "geo_vendi": 0.9788,
-    "time_vendi": 0.8601,
-    "hm_r10_vendi": 0.886278
+    "r1": 0.757842,
+    "r10": 0.835634,
+    "img_vendi": 0.9429,
+    "ext_vendi": 0.944203,
+    "mean_vendi": 0.943469,
+    "geo_vendi": 0.978828,
+    "time_vendi": 0.860096,
+    "hm_r10_vendi": 0.886283
   },
   "mascot_pure_dec": {
     "label": "mascot_pure_dec",
-    "r1": 0.0,
-    "r10": 0.941,
-    "img_vendi": 0.0,
-    "ext_vendi": 0.0,
-    "mean_vendi": 0.1881,
-    "geo_vendi": 0.8878,
-    "time_vendi": 0.8083,
-    "hm_r10_vendi": 0.313528
+    "r1": 0.720201,
+    "r10": 0.941029,
+    "img_vendi": 0.935701,
+    "ext_vendi": 0.12202,
+    "mean_vendi": 0.188099,
+    "geo_vendi": 0.887801,
+    "time_vendi": 0.808333,
+    "hm_r10_vendi": 0.313527
   },
   "mascot_geo_inc_time_dec": {
     "label": "mascot_geo_inc_time_dec",
-    "r1": 0.0,
-    "r10": 0.1167,
-    "img_vendi": 0.0,
-    "ext_vendi": 0.0,
-    "mean_vendi": 0.928,
-    "geo_vendi": 0.962,
-    "time_vendi": 0.7894,
-    "hm_r10_vendi": 0.207328
+    "r1": 0.030113,
+    "r10": 0.116688,
+    "img_vendi": 0.942699,
+    "ext_vendi": 0.914354,
+    "mean_vendi": 0.927989,
+    "geo_vendi": 0.962002,
+    "time_vendi": 0.78937,
+    "hm_r10_vendi": 0.207308
   },
   "mascot_geo_dec_time_inc": {
     "label": "mascot_geo_dec_time_inc",
     "r1": 0.0,
-    "r10": 0.0038,
-    "img_vendi": 0.0,
-    "ext_vendi": 0.0,
-    "mean_vendi": 0.9208,
-    "geo_vendi": 0.9005,
-    "time_vendi": 0.8319,
-    "hm_r10_vendi": 0.007569
+    "r10": 0.003764,
+    "img_vendi": 0.943953,
+    "ext_vendi": 0.899284,
+    "mean_vendi": 0.920821,
+    "geo_vendi": 0.900542,
+    "time_vendi": 0.831917,
+    "hm_r10_vendi": 0.007498
   },
   "msdpp_pure_inc": {
     "label": "msdpp_pure_inc",

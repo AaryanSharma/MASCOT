@@ -10,10 +10,27 @@ Hyperparameters (θ, σ_geo, σ_time) reverse-matched from
 `i1m_metrices*.log` grid-search best-param records: for PP by (R@10, DM),
 for VG and I1M by (MAP, DM) since those tasks record MAP as Retrieval Index.
 
-Units: **σ_geo in degrees** (Euclidean distance in lat/lon degree-space;
-see `src/msdpp/data.py::get_geo_iu_probs`). **σ_time in hours**.
-For decrease rows, DM is raw `mean_vendi`; the paper's main tables use
-`1 − DM` so higher is better in both directions (Appendix G.3).
+Units: **σ_geo in degrees**, **σ_time in hours**.
+
+The paper uses two distinct geographic representations at two stages —
+easy to conflate, so worth spelling out:
+
+- **Soft-binning kernel** `p(u, i)` = `get_geo_iu_probs` in
+  `src/msdpp/data.py` operates on `(lat, lon)` pairs in degrees against
+  a `linspace(-90, 90) × linspace(-180, 180)` grid. Distance is Euclidean
+  over degrees. **σ_geo is in degrees.**
+- **Diversity metric (DM / Vendi score)** `calc_vendi_score` in
+  `src/msdpp/evalindex/eval_index.py` operates on the `ext` field of
+  each dataset, which for PP_geo is `F.normalize([x, y, z], 2, -1)` —
+  unit 3D vectors on the sphere (`x = cos(lat)cos(lon)`,
+  `y = cos(lat)sin(lon)`, `z = sin(lat)`). This is what the paper's §5.1
+  refers to when it describes "distance over unit 3D vectors": the
+  similarity kernel used inside the Vendi computation, not the σ_geo
+  bandwidth of the soft-binning kernel.
+
+For decrease rows, DM in the columns below is raw `mean_vendi`; the
+paper's main tables use `1 − DM` so higher is better in both directions
+(Appendix G.3).
 PP and VG tasks report R@10; **I1M reports MAP** (Table 10).
 
 | Task | Dir | Method | λ (θ) | σ_geo | σ_time | R@10 | MAP | mean_vendi | 1−DM (dec) |

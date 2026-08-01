@@ -1,0 +1,95 @@
+{
+  "task": "PP_geo",
+  "direction": "decrease",
+  "method": "prob_coverage",
+  "axis": "grid_size",
+  "anchor": {
+    "theta": 0.2,
+    "sigma_geo": 10.0,
+    "sigma_time": 0.5,
+    "grid_size": 20,
+    "num_bins": 24
+  },
+  "sweep": [
+    {
+      "param_value": 5,
+      "r1": 0.457967,
+      "r5": 0.657466,
+      "r10": 0.754078,
+      "map_": 0.550003,
+      "img_vendi": 0.935561,
+      "ext_vendi": 0.244481,
+      "mean_vendi": 0.361337
+    },
+    {
+      "param_value": 10,
+      "r1": 0.55458,
+      "r5": 0.757842,
+      "r10": 0.816813,
+      "map_": 0.641207,
+      "img_vendi": 0.93901,
+      "ext_vendi": 0.307965,
+      "mean_vendi": 0.448379
+    },
+    {
+      "param_value": 15,
+      "r1": 0.662484,
+      "r5": 0.780427,
+      "r10": 0.78921,
+      "map_": 0.712642,
+      "img_vendi": 0.9395,
+      "ext_vendi": 0.34622,
+      "mean_vendi": 0.493856
+    },
+    {
+      "param_value": 20,
+      "r1": 0.7867,
+      "r5": 0.860728,
+      "r10": 0.867001,
+      "map_": 0.818671,
+      "img_vendi": 0.939314,
+      "ext_vendi": 0.360458,
+      "mean_vendi": 0.50836
+    },
+    {
+      "param_value": 25,
+      "r1": 0.666248,
+      "r5": 0.745295,
+      "r10": 0.756587,
+      "map_": 0.701233,
+      "img_vendi": 0.940091,
+      "ext_vendi": 0.358927,
+      "mean_vendi": 0.508393
+    },
+    {
+      "param_value": 30,
+      "r1": 0.120452,
+      "r5": 0.21079,
+      "r10": 0.223338,
+      "map_": 0.162085,
+      "img_vendi": 0.941525,
+      "ext_vendi": 0.352923,
+      "mean_vendi": 0.507106
+    },
+    {
+      "param_value": 40,
+      "r1": 0.031368,
+      "r5": 0.076537,
+      "r10": 0.08532,
+      "map_": 0.050469,
+      "img_vendi": 0.942222,
+      "ext_vendi": 0.350789,
+      "mean_vendi": 0.506622
+    },
+    {
+      "param_value": 50,
+      "r1": 0.016311,
+      "r5": 0.055207,
+      "r10": 0.069009,
+      "map_": 0.034847,
+      "img_vendi": 0.942339,
+      "ext_vendi": 0.350076,
+      "mean_vendi": 0.506083
+    }
+  ]
+}

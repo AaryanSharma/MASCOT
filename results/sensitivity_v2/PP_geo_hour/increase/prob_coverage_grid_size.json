@@ -1,0 +1,95 @@
+{
+  "task": "PP_geo_hour",
+  "direction": "increase",
+  "method": "prob_coverage",
+  "axis": "grid_size",
+  "anchor": {
+    "theta": 0.1,
+    "sigma_geo": 1.0,
+    "sigma_time": 0.5,
+    "grid_size": 20,
+    "num_bins": 24
+  },
+  "sweep": [
+    {
+      "param_value": 5,
+      "r1": 0.782936,
+      "r5": 0.917189,
+      "r10": 0.951066,
+      "map_": 0.844602,
+      "img_vendi": 0.940084,
+      "ext_vendi": 0.925637,
+      "mean_vendi": 0.932253
+    },
+    {
+      "param_value": 10,
+      "r1": 0.780427,
+      "r5": 0.91468,
+      "r10": 0.948557,
+      "map_": 0.841726,
+      "img_vendi": 0.940252,
+      "ext_vendi": 0.925712,
+      "mean_vendi": 0.932378
+    },
+    {
+      "param_value": 15,
+      "r1": 0.570891,
+      "r5": 0.878294,
+      "r10": 0.930991,
+      "map_": 0.70747,
+      "img_vendi": 0.940644,
+      "ext_vendi": 0.927853,
+      "mean_vendi": 0.933716
+    },
+    {
+      "param_value": 20,
+      "r1": 0.76537,
+      "r5": 0.913425,
+      "r10": 0.947302,
+      "map_": 0.83118,
+      "img_vendi": 0.940504,
+      "ext_vendi": 0.926648,
+      "mean_vendi": 0.932993
+    },
+    {
+      "param_value": 25,
+      "r1": 0.685069,
+      "r5": 0.898369,
+      "r10": 0.937265,
+      "map_": 0.778178,
+      "img_vendi": 0.940699,
+      "ext_vendi": 0.927554,
+      "mean_vendi": 0.933591
+    },
+    {
+      "param_value": 30,
+      "r1": 0.656211,
+      "r5": 0.874529,
+      "r10": 0.93601,
+      "map_": 0.757626,
+      "img_vendi": 0.941096,
+      "ext_vendi": 0.930421,
+      "mean_vendi": 0.935291
+    },
+    {
+      "param_value": 40,
+      "r1": 0.700125,
+      "r5": 0.885822,
+      "r10": 0.925972,
+      "map_": 0.781911,
+      "img_vendi": 0.941096,
+      "ext_vendi": 0.929116,
+      "mean_vendi": 0.93461
+    },
+    {
+      "param_value": 50,
+      "r1": 0.638645,
+      "r5": 0.851945,
+      "r10": 0.902133,
+      "map_": 0.733343,
+      "img_vendi": 0.941758,
+      "ext_vendi": 0.933938,
+      "mean_vendi": 0.937497
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "task": "PP_geo",
+  "direction": "decrease",
+  "method": "prob_coverage",
+  "axis": "sigma_geo",
+  "anchor": {
+    "theta": 0.2,
+    "sigma_geo": 10.0,
+    "sigma_time": 0.5,
+    "grid_size": 20,
+    "num_bins": 24
+  },
+  "sweep": [
+    {
+      "param_value": 0.5,
+      "r1": 0.78921,
+      "r5": 0.942284,
+      "r10": 0.973651,
+      "map_": 0.85711,
+      "img_vendi": 0.936381,
+      "ext_vendi": 0.226424,
+      "mean_vendi": 0.342098
+    },
+    {
+      "param_value": 1.0,
+      "r1": 0.76788,
+      "r5": 0.934755,
+      "r10": 0.963614,
+      "map_": 0.840817,
+      "img_vendi": 0.936333,
+      "ext_vendi": 0.229527,
+      "mean_vendi": 0.346334
+    },
+    {
+      "param_value": 2.0,
+      "r1": 0.686324,
+      "r5": 0.858218,
+      "r10": 0.898369,
+      "map_": 0.762163,
+      "img_vendi": 0.937062,
+      "ext_vendi": 0.238511,
+      "mean_vendi": 0.358734
+    },
+    {
+      "param_value": 5.0,
+      "r1": 0.478043,
+      "r5": 0.683814,
+      "r10": 0.72271,
+      "map_": 0.561359,
+      "img_vendi": 0.939773,
+      "ext_vendi": 0.348695,
+      "mean_vendi": 0.496403
+    },
+    {
+      "param_value": 10.0,
+      "r1": 0.7867,
+      "r5": 0.860728,
+      "r10": 0.867001,
+      "map_": 0.818671,
+      "img_vendi": 0.939314,
+      "ext_vendi": 0.360458,
+      "mean_vendi": 0.50836
+    },
+    {
+      "param_value": 15.0,
+      "r1": 0.041405,
+      "r5": 0.082811,
+      "r10": 0.091593,
+      "map_": 0.057521,
+      "img_vendi": 0.942292,
+      "ext_vendi": 0.350061,
+      "mean_vendi": 0.505958
+    },
+    {
+      "param_value": 20.0,
+      "r1": 0.012547,
+      "r5": 0.056462,
+      "r10": 0.066499,
+      "map_": 0.029653,
+      "img_vendi": 0.94252,
+      "ext_vendi": 0.348762,
+      "mean_vendi": 0.504998
+    },
+    {
+      "param_value": 30.0,
+      "r1": 0.008783,
+      "r5": 0.050188,
+      "r10": 0.062735,
+      "map_": 0.024608,
+      "img_vendi": 0.942538,
+      "ext_vendi": 0.346847,
+      "mean_vendi": 0.502728
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "task": "PP_geo",
+  "direction": "increase",
+  "method": "prob_coverage",
+  "axis": "sigma_geo",
+  "anchor": {
+    "theta": 0.1,
+    "sigma_geo": 10.0,
+    "sigma_time": 0.5,
+    "grid_size": 20,
+    "num_bins": 24
+  },
+  "sweep": [
+    {
+      "param_value": 0.5,
+      "r1": 0.787955,
+      "r5": 0.943538,
+      "r10": 0.973651,
+      "map_": 0.856718,
+      "img_vendi": 0.936523,
+      "ext_vendi": 0.776638,
+      "mean_vendi": 0.844988
+    },
+    {
+      "param_value": 1.0,
+      "r1": 0.76537,
+      "r5": 0.93601,
+      "r10": 0.972396,
+      "map_": 0.843405,
+      "img_vendi": 0.937145,
+      "ext_vendi": 0.784308,
+      "mean_vendi": 0.84995
+    },
+    {
+      "param_value": 2.0,
+      "r1": 0.68256,
+      "r5": 0.919699,
+      "r10": 0.958595,
+      "map_": 0.786555,
+      "img_vendi": 0.938647,
+      "ext_vendi": 0.810904,
+      "mean_vendi": 0.866713
+    },
+    {
+      "param_value": 5.0,
+      "r1": 0.613551,
+      "r5": 0.87202,
+      "r10": 0.923463,
+      "map_": 0.723554,
+      "img_vendi": 0.941334,
+      "ext_vendi": 0.878306,
+      "mean_vendi": 0.907656
+    },
+    {
+      "param_value": 10.0,
+      "r1": 0.784191,
+      "r5": 0.883312,
+      "r10": 0.900878,
+      "map_": 0.829486,
+      "img_vendi": 0.943207,
+      "ext_vendi": 0.918173,
+      "mean_vendi": 0.930424
+    },
+    {
+      "param_value": 15.0,
+      "r1": 0.780427,
+      "r5": 0.863237,
+      "r10": 0.87202,
+      "map_": 0.81967,
+      "img_vendi": 0.943693,
+      "ext_vendi": 0.918689,
+      "mean_vendi": 0.93094
+    },
+    {
+      "param_value": 20.0,
+      "r1": 0.734003,
+      "r5": 0.82936,
+      "r10": 0.846926,
+      "map_": 0.779788,
+      "img_vendi": 0.94387,
+      "ext_vendi": 0.908031,
+      "mean_vendi": 0.925476
+    },
+    {
+      "param_value": 30.0,
+      "r1": 0.351317,
+      "r5": 0.642409,
+      "r10": 0.770389,
+      "map_": 0.471283,
+      "img_vendi": 0.943898,
+      "ext_vendi": 0.8846,
+      "mean_vendi": 0.913041
+    }
+  ]
+}

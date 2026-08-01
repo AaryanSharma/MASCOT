@@ -1,0 +1,95 @@
+{
+  "task": "PP_geo_hour",
+  "direction": "decrease",
+  "method": "prob_coverage",
+  "axis": "grid_size",
+  "anchor": {
+    "theta": 0.4,
+    "sigma_geo": 10.0,
+    "sigma_time": 1.5,
+    "grid_size": 20,
+    "num_bins": 24
+  },
+  "sweep": [
+    {
+      "param_value": 5,
+      "r1": 0.31744,
+      "r5": 0.357591,
+      "r10": 0.38143,
+      "map_": 0.340557,
+      "img_vendi": 0.940407,
+      "ext_vendi": 0.143593,
+      "mean_vendi": 0.227549
+    },
+    {
+      "param_value": 10,
+      "r1": 0.40527,
+      "r5": 0.442911,
+      "r10": 0.478043,
+      "map_": 0.427762,
+      "img_vendi": 0.942667,
+      "ext_vendi": 0.173866,
+      "mean_vendi": 0.288393
+    },
+    {
+      "param_value": 15,
+      "r1": 0.326223,
+      "r5": 0.378921,
+      "r10": 0.400251,
+      "map_": 0.352531,
+      "img_vendi": 0.942119,
+      "ext_vendi": 0.169121,
+      "mean_vendi": 0.279702
+    },
+    {
+      "param_value": 20,
+      "r1": 0.675031,
+      "r5": 0.72271,
+      "r10": 0.730238,
+      "map_": 0.69824,
+      "img_vendi": 0.941372,
+      "ext_vendi": 0.173903,
+      "mean_vendi": 0.281733
+    },
+    {
+      "param_value": 25,
+      "r1": 0.037641,
+      "r5": 0.074028,
+      "r10": 0.091593,
+      "map_": 0.059033,
+      "img_vendi": 0.942297,
+      "ext_vendi": 0.138057,
+      "mean_vendi": 0.234435
+    },
+    {
+      "param_value": 30,
+      "r1": 0.030113,
+      "r5": 0.06399,
+      "r10": 0.081556,
+      "map_": 0.048503,
+      "img_vendi": 0.942364,
+      "ext_vendi": 0.134678,
+      "mean_vendi": 0.230416
+    },
+    {
+      "param_value": 40,
+      "r1": 0.012547,
+      "r5": 0.045169,
+      "r10": 0.061481,
+      "map_": 0.030276,
+      "img_vendi": 0.942277,
+      "ext_vendi": 0.133474,
+      "mean_vendi": 0.229004
+    },
+    {
+      "param_value": 50,
+      "r1": 0.012547,
+      "r5": 0.038896,
+      "r10": 0.052698,
+      "map_": 0.027101,
+      "img_vendi": 0.942394,
+      "ext_vendi": 0.132593,
+      "mean_vendi": 0.2283
+    }
+  ]
+}

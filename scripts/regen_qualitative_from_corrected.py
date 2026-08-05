@@ -370,14 +370,21 @@ def make_qualitative_figure(
             draw_geo_heatmap(ax_geo, all_gps,
                              title="Location dist.", highlight=top_gps)
 
-        # ── Caption below row (centered on middle image axes) ─────────
-        if center_ax is not None:
-            center_ax.text(
-                0.5, -0.09, caption,
-                transform=center_ax.transAxes,
-                ha="center", va="top",
-                fontsize=8.5, fontweight="bold", color="#111",
-            )
+    # ── Row captions in figure coords: horizontally centered across the
+    #    full row (images + metadata columns), vertically midway between
+    #    this row's bottom edge and the next row's top edge.
+    bottoms, tops, lefts, rights = gs.get_grid_positions(fig)
+    x_center = (float(lefts[0]) + float(rights[-1])) / 2
+    for row_i, spec in enumerate(row_specs):
+        if row_i < n_rows - 1:
+            y = (float(bottoms[row_i]) + float(tops[row_i + 1])) / 2
+        else:
+            y = float(bottoms[row_i]) - 0.015
+        fig.text(
+            x_center, y, spec["caption"],
+            ha="center", va="center",
+            fontsize=8.5, fontweight="bold", color="#111",
+        )
 
     plt.savefig(save_path, dpi=200, bbox_inches="tight")
     plt.close()
@@ -414,96 +421,67 @@ def load_cases(pattern: str, base: Path = FAILURE_DIR) -> list:
 CONFIGS = [
     # (task_type, inc_suffix, dec_suffix, figure_name)
     # All three panels drawn from PP_geo_hour retrievals — only the metadata
-    # column shown differs. seed=103 → qi=554 (barn-owl painting): decrease
-    # MASCOT wins recall + concentrates 32× on geo; increase MASCOT wins
-    # recall + spreads 16× on geo. Best MASCOT-vs-MS-DPP contrast among
-    # queries where MASCOT wins R@10 in both directions.
+    # column shown differs. Seeds selected to hit specific query indices;
+    # see PICKS below.
     ("hour",     "PP_geo_hour_increase", "PP_geo_hour_decrease", "qualitative_hour"),
     ("geo",      "PP_geo_hour_increase", "PP_geo_hour_decrease", "qualitative_geo"),
     ("geo_hour", "PP_geo_hour_increase", "PP_geo_hour_decrease", "qualitative_geo_hour"),
 ]
 
-PICK_SEED = 103
+# (seed, tag, note). Each pick emits {SAVE_DIR}/{tag}/{qualitative_*}.png
+PICKS = [
+    (103, "barn_owl",        "qi=554  — MASCOT wins R@10 both dirs, huge geo flip"),
+    (7,   "green_shirt",     "qi=19   — man with bicycle on mountain road"),
+    (42,  "solar_panels",    "qi=212  — house with solar panels"),
+    (14,  "aerial_house",    "qi=326  — aerial photograph of large house"),
+]
 
-for task_type, inc_sfx, dec_sfx, fig_name in CONFIGS:
-    print(f"\n── Generating: {fig_name} ──")
+for pick_seed, tag, note in PICKS:
+    print(f"\n════════ PICK: seed={pick_seed}  tag={tag}  ({note}) ════════")
+    pick_dir = SAVE_DIR / tag
+    pick_dir.mkdir(parents=True, exist_ok=True)
 
-    cases_inc_ms  = load_cases(f"failure_cases_{inc_sfx}_msdpp_tn_tvms.json")
-    cases_dec_ms  = load_cases(f"failure_cases_{dec_sfx}_msdpp_tn_tvms.json")
-    # ma_smf loads from corrected dir (bug #1 fix: filename now includes ablation suffix,
-    # so plain _ma_smf.json is the true MASCOT variant with ablation_no_omega=False)
-    cases_inc_our = load_cases(f"failure_cases_{inc_sfx}_ma_smf.json", base=CORRECTED_DIR)
-    cases_dec_our = load_cases(f"failure_cases_{dec_sfx}_ma_smf.json", base=CORRECTED_DIR)
+    for task_type, inc_sfx, dec_sfx, fig_name in CONFIGS:
+        print(f"\n── Generating: {tag}/{fig_name} ──")
 
-    if not all([cases_inc_ms, cases_dec_ms, cases_inc_our, cases_dec_our]):
-        print("  Missing data — skipping.")
-        continue
+        cases_inc_ms  = load_cases(f"failure_cases_{inc_sfx}_msdpp_tn_tvms.json")
+        cases_dec_ms  = load_cases(f"failure_cases_{dec_sfx}_msdpp_tn_tvms.json")
+        # ma_smf loads from corrected dir (bug #1 fix)
+        cases_inc_our = load_cases(f"failure_cases_{inc_sfx}_ma_smf.json", base=CORRECTED_DIR)
+        cases_dec_our = load_cases(f"failure_cases_{dec_sfx}_ma_smf.json", base=CORRECTED_DIR)
 
-    n = min(len(cases_inc_ms), len(cases_dec_ms),
-            len(cases_inc_our), len(cases_dec_our))
-    cases_inc_ms  = cases_inc_ms[:n]
-    cases_dec_ms  = cases_dec_ms[:n]
-    cases_inc_our = cases_inc_our[:n]
-    cases_dec_our = cases_dec_our[:n]
+        if not all([cases_inc_ms, cases_dec_ms, cases_inc_our, cases_dec_our]):
+            print("  Missing data — skipping.")
+            continue
 
-    # Pick a good query for both methods simultaneously
-    qi_ms  = pick_good_query(cases_inc_ms,  cases_dec_ms,  task_type, seed=PICK_SEED)
-    qi_our = pick_good_query(cases_inc_our, cases_dec_our, task_type, seed=PICK_SEED)
-    # Use the same query index
-    qi = qi_ms
-    print(f"  Query index: {qi}")
-    print(f"  Query: {cases_inc_ms[qi]['query'][:80]}…")
+        n = min(len(cases_inc_ms), len(cases_dec_ms),
+                len(cases_inc_our), len(cases_dec_our))
+        cases_inc_ms  = cases_inc_ms[:n]; cases_dec_ms  = cases_dec_ms[:n]
+        cases_inc_our = cases_inc_our[:n]; cases_dec_our = cases_dec_our[:n]
 
-    def _bn(p): return Path(p).name
-    # Also load buggy versions (pre-fix) for BEFORE/AFTER comparison at the same qi
-    buggy_inc = load_cases(f"failure_cases_{inc_sfx}_ma_smf.json", base=FAILURE_DIR)
-    buggy_dec = load_cases(f"failure_cases_{dec_sfx}_ma_smf.json", base=FAILURE_DIR)
-    print(f"  ROW c ({fig_name} — MASCOT increase) top-3:")
-    print(f"    BEFORE (buggy _ma_smf.json = Uniform Binning):")
-    for i, p in enumerate(buggy_inc[qi]['retrieved'][:3]):
-        print(f"      {i+1}. {_bn(p)}")
-    print(f"    AFTER (corrected _ma_smf.json = true MASCOT):")
-    for i, p in enumerate(cases_inc_our[qi]['retrieved'][:3]):
-        print(f"      {i+1}. {_bn(p)}")
-    print(f"  ROW d ({fig_name} — MASCOT decrease) top-3:")
-    print(f"    BEFORE:")
-    for i, p in enumerate(buggy_dec[qi]['retrieved'][:3]):
-        print(f"      {i+1}. {_bn(p)}")
-    print(f"    AFTER:")
-    for i, p in enumerate(cases_dec_our[qi]['retrieved'][:3]):
-        print(f"      {i+1}. {_bn(p)}")
+        qi = pick_good_query(cases_inc_ms, cases_dec_ms, task_type, seed=pick_seed)
+        print(f"  Query index: {qi}")
+        print(f"  Query: {cases_inc_ms[qi]['query'][:80]}…")
 
-    task_str = TASK_LABEL[task_type]
-    row_specs = [
-        {
-            "cases":     cases_inc_ms,
-            "all_cases": cases_inc_ms,
-            "caption":   make_caption("a", "MS-DPP", task_str, "inc"),
-        },
-        {
-            "cases":     cases_dec_ms,
-            "all_cases": cases_dec_ms,
-            "caption":   make_caption("b", "MS-DPP", task_str, "dec"),
-        },
-        {
-            "cases":     cases_inc_our,
-            "all_cases": cases_inc_our,
-            "caption":   make_caption("c", "MASCOT", task_str, "inc"),
-        },
-        {
-            "cases":     cases_dec_our,
-            "all_cases": cases_dec_our,
-            "caption":   make_caption("d", "MASCOT", task_str, "dec"),
-        },
-    ]
+        task_str = TASK_LABEL[task_type]
+        row_specs = [
+            {"cases": cases_inc_ms,  "all_cases": cases_inc_ms,
+             "caption": make_caption("a", "MS-DPP", task_str, "inc")},
+            {"cases": cases_dec_ms,  "all_cases": cases_dec_ms,
+             "caption": make_caption("b", "MS-DPP", task_str, "dec")},
+            {"cases": cases_inc_our, "all_cases": cases_inc_our,
+             "caption": make_caption("c", "MASCOT", task_str, "inc")},
+            {"cases": cases_dec_our, "all_cases": cases_dec_our,
+             "caption": make_caption("d", "MASCOT", task_str, "dec")},
+        ]
 
-    make_qualitative_figure(
-        query=cases_inc_ms[qi]["query"],
-        row_specs=row_specs,
-        query_idx=qi,
-        task_type=task_type,
-        save_path=SAVE_DIR / f"{fig_name}.png",
-        n_top=3,
-    )
+        make_qualitative_figure(
+            query=cases_inc_ms[qi]["query"],
+            row_specs=row_specs,
+            query_idx=qi,
+            task_type=task_type,
+            save_path=pick_dir / f"{fig_name}.png",
+            n_top=3,
+        )
 
 print("\nDone.")

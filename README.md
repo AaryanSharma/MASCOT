@@ -345,7 +345,7 @@ for the reconciled per-direction findings.
 | Combined | **HM (Overall Score)** | Harmonic Mean of R@10 and Div Index |
 | Controllability | **PRS** | Preference Reflection Score — monotonicity of Div Index as λ sweeps 0→1 |
 
-In **increase** tasks, higher Div Index = better. In **decrease** tasks, the paper reports the transformed metric `1 − DM` so that higher is always better in both directions (see Appendix G.3). The raw `mean_vendi` field in `tables/*.json` is untransformed; downstream `1−DM` conversion happens at the harmonic-mean step.
+In **increase** tasks, higher Div Index = better. In **decrease** tasks, the paper reports the transformed metric `1 − DM` so that higher is always better in both directions (see Appendix G.3). The `mean_vendi` / `div_index` field in `tables/*.json` is already transformed to higher-is-better in `EvalIndexCalculator.calc()` (`src/msdpp/evalindex/eval_index.py:162-164` applies `1 − ext_vendi` when `direction == DivDir.DECREASE` before harmonic-mean combination); no downstream conversion needed.
 
 ---
 
@@ -355,8 +355,10 @@ In **increase** tasks, higher Div Index = better. In **decrease** tasks, the pap
 
 ```bash
 cd examples/
-python grid_search_eval.py  # uses configs/overall.json + div_selected.json
-# Results written to configs/tables/PP_geo_decrease.json, etc.
+python grid_search_eval.py --dataset pp  # uses configs/overall.json + div_selected.json
+# Results written to results/pp/tables/PP_geo_decrease.json, etc.
+# (The paper's cited PP tables live at results/failure_cases_run2/tables/, produced
+#  by re-running with --result_dir results/failure_cases_run2 after bug #1/#2 fixes.)
 ```
 
 ### Table 2 (Increase Tasks, PP datasets)

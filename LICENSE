@@ -7,3 +7,17 @@ The software, including all associated documentation and files (the "Software"),
 3. You have no rights in the Software and the Derivative Software other than those specified herein. The Software and the Derivative Software must not be used, copied, reproduced, modified, distributed, or redistributed for any purposes other than Research Purposes, including but not limited to commercial or business purposes.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE AND THE PUBLICATION BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+----
+
+Reference publication for the original Software (clause 2):
+  N. Sogi, T. Shibata, M. Terao, M. Suganuma, T. Okatani.
+  "MS-DPPs: Multi-Source Determinantal Point Processes for Contextual Diversity
+  Refinement of Composite Attributes in Text-to-Image Retrieval."
+  IJCAI 2025. https://arxiv.org/abs/2507.06654
+
+Accompanying Related Research publication for this Derivative Software (clause 2):
+  A. Sharma, V. Prasad C, V. Singh, G. Ramakrishnan.
+  "MASCOT: Model-Aware Submodular Coverage for Composite-Attribute
+  Text-to-Image Retrieval."
+  ACM MM 2026. https://doi.org/10.1145/3767308.3836500

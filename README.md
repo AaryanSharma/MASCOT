@@ -517,12 +517,14 @@ Also cite the MS-DPP baseline and codebase this work builds on:
 
 ## License
 
-Copyright 2026 the MASCOT authors. See [LICENSE](LICENSE).
+See [LICENSE](LICENSE) for the full text.
 
 MASCOT is a derivative of the [MS-DPP codebase](https://github.com/NEC-N-SOGI/msdpp)
-(Copyright 2025 NEC Corporation), whose license permits research use only and
-requires distributions to include the license notice and reference the accompanying
-publication. The MASCOT release honours those terms: the same license text applies
-to this repository, and both the MASCOT paper (this repository's citation, above)
-and the MS-DPP paper (also cited above) are the accompanying publications. Do not
-use this code for commercial purposes.
+(Copyright 2025 NEC Corporation), whose license permits research use only and permits
+distribution only when accompanied by a research publication reporting related
+research, with the license notice, copyright notice, and a reference to the MS-DPP
+publication included. This release satisfies those terms: the MASCOT paper (cited
+above) is the accompanying research publication, the MS-DPP paper (also cited above)
+is referenced, and the NEC license text applies unchanged to this repository. Both
+publication references are also embedded at the bottom of the LICENSE file so they
+travel with the code. Do not use this code for commercial or non-research purposes.

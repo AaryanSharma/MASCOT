@@ -8,6 +8,7 @@
 [![Built on MS-DPP](https://img.shields.io/badge/Built%20on-MS--DPP%20codebase-lightgrey.svg)](https://arxiv.org/abs/2507.06654)
 
 **ACM MM 2026** | Rio de Janeiro, Brazil
+**DOI:** [10.1145/3767308.3836500](https://doi.org/10.1145/3767308.3836500)
 
 **Aaryan Sharma¹ · Vishak Prasad C² · Virendra Singh¹ · Ganesh Ramakrishnan²**
 
@@ -33,20 +34,30 @@ While manifold-based methods (MS-DPP) excel at *increasing* diversity via spatia
 | PP_geo (Decrease) | R@10 | 0.7704 | **0.8105** |
 | Average (Decrease) | R@10 | 67.63% | **88.58%** |
 
-MASCOT preserves early-rank recall in the decrease regime — MS-DPP's manifold repulsion collapses R@10 from >0.97 to 0.49 on the composite PP_geo_hour decrease task, whereas MASCOT maintains 0.94. On the harmonic mean of R@10 and Diversity Index, the coverage ablations (Uniform Binning, Prob-Coverage) reach comparable or higher scores than full MASCOT on these decrease tasks; MASCOT's contribution is the recall protection under diversity-decrease constraints, not universal HM dominance.
+MASCOT trades a modest amount of increase-direction performance for behaviour
+that does not degenerate when the constraint is inverted. We do not claim
+uniform superiority: on aggregate diversity–relevance scores, our simpler
+Uniform Binning ablation attains higher harmonic means on all three decrease
+tasks, and on the single-attribute `PP_geo` task it is better at every rank.
+MASCOT's advantage is specific to recall beyond rank 1 under composite
+constraints.
 
 ---
 
 ## Core Contributions
 
-1. **Manifold Vulnerability Identification**: We show that MS-DPP collapses below 50% R@1 during diversity-decrease tasks due to its continuous spatial repulsion being structurally incompatible with tight-cluster constraints.
+1. **Manifold Vulnerability Identification**: We show that MS-DPP drops to R@1 = 0.2346 on the composite PP_geo_hour decrease task, because its continuous spatial repulsion is structurally incompatible with tight-cluster constraints.
 
 2. **MASCOT Framework**: A submodular coverage formulation with:
    - **Soft Information Units (IUs)**: Gaussian-kernel soft-binning of discrete metadata (24 temporal bins; geographic grid) to prevent hard boundary penalties.
    - **Normalized Semantic Relevance (R-hat)**: Local min-max normalization of VLM cosine scores to compete against cumulative coverage sums.
    - **Query-Driven Bin Importance (Ω)**: Dynamic bin weights equal to peak relevance within each bin — prevents wasting retrieval budget on empty or irrelevant bins.
 
-3. **Recall-Preserving Diversity Decrease**: MASCOT preserves early-rank recall (R@10) under diversity-decrease constraints where manifold repulsion (MS-DPP) collapses it. This is MASCOT's targeted contribution; ablations of MASCOT (Uniform Binning, Prob-Coverage) achieve comparable or higher harmonic mean on these tasks — recall protection is the differentiator, not universal HM dominance.
+3. **Semantic-Safe Diversity Decrease**: Because the coverage penalty is
+   bounded by each bin's residual capacity, relevance lost at early ranks is
+   bounded and recovered quickly — R@1 = 0.7202 and R@10 = 0.9410 on
+   `PP_geo_hour` decrease, against MS-DPP's 0.2346 and 0.4931. MASCOT does
+   not preserve the top-ranked result.
 
 ---
 
@@ -69,7 +80,7 @@ For `d = -1` (decrease), coverage becomes a **penalty**: selecting images in alr
 ## Project Structure (built on MS-DPP codebase)
 
 ```
-msdpp/
+MASCOT/
 ├── src/msdpp/
 │   ├── div_method/
 │   │   ├── ma_smf.py           ← MASCOT implementation (ModelAwareSubmodularMethod)
@@ -127,7 +138,6 @@ msdpp/
 ├── rebuttal/                      ← ACM MM 2026 rebuttal materials
 │   ├── README.md
 │   ├── response.md                    ← Point-by-point response
-│   ├── camera_ready_todos.md          ← Tracked revisions for camera-ready
 │   └── appendix_hyperparameters.md    ← Per-(task, direction, method) hyperparameter table for Appendix D
 ├── scripts/                       ← Reproducibility scripts (regen failure_cases + sensitivity sweeps)
 └── pyproject.toml                 ← Dependencies (uv)
@@ -141,17 +151,7 @@ msdpp/
 - CUDA-compatible GPU (required for BLIP-2 inference)
 - Python 3.10–3.11
 
-### Option 1: Docker (Recommended)
-
-```bash
-# 1. Configure mount paths
-vim Makefile
-
-# 2. Launch container
-make up
-```
-
-### Option 2: uv
+Install via [`uv`](https://docs.astral.sh/uv/):
 
 ```bash
 uv sync
@@ -185,7 +185,7 @@ python pixelprose_preprocess.py
 - Result: ~996 images (996 of 1,799 EXIF-filtered survive URL attrition)
 - Supports: `PP_geo`, `PP_hour`, `PP_geo_hour` tasks
 
-> **Note**: The paper reports 25,151 images following MS-DPP [48]. Due to subsequent PixelProse HuggingFace updates and URL decay, the current reproducible count is 996. All comparisons remain valid as the same 996 images are used for all methods.
+> **Note**: The paper reports 25,151 images following MS-DPP. Due to subsequent PixelProse HuggingFace updates and URL decay, the current reproducible count is 996. All comparisons remain valid as the same 996 images are used for all methods.
 
 ### Visual Genome (VG) — Temporal Task
 
@@ -308,30 +308,31 @@ Both use Gaussian kernels: `p(u, i) = exp(-dist² / 2σ²)`, with probabilities 
 
 ## Hyperparameters
 
-Val-best MASCOT hyperparameters per (task, direction). σ_geo is in **degrees**
-(distance is Euclidean in lat/lon degree-space; see `get_geo_iu_probs` in
-`src/msdpp/data.py`). σ_time is in hours.
+Validation-selected values, held fixed at test time. **These must be used
+exactly** — see the warning below.
 
-| Task | Direction | λ (θ) | σ_geo | σ_time | grid | R@10 |
+| Task | Dir | λ (`theta`) | σ_geo | σ_time | Grid | R@10 |
 |---|---|---|---|---|---|---|
-| PP_geo | decrease | 0.3 | 10.0 | 0.5 | 20 | 0.8105 |
-| PP_geo | increase | 0.8 | 15.0 | 0.5 | 20 | 0.9109 |
-| PP_hour | decrease | 0.4 | 1.0 | 0.5 | — | 0.9059 |
-| PP_hour | increase | 0.9 | 1.0 | 1.5 | — | 0.8921 |
-| PP_geo_hour | decrease | **0.1** | 15.0 | 3.0 | 20 | 0.9410 |
-| PP_geo_hour | increase | 0.8 | 15.0 | 1.5 | 20 | 0.8356 |
+| PP_geo      | dec | 0.3 | 10.0 | —   | 20 | 0.8105 |
+| PP_geo      | inc | 0.8 | 15.0 | —   | 20 | 0.9109 |
+| PP_hour     | dec | 0.4 | —    | 0.5 | —  | 0.9059 |
+| PP_hour     | inc | 0.9 | —    | 1.5 | —  | 0.8921 |
+| PP_geo_hour | dec | 0.1 | 15.0 | 3.0 | 20 | 0.9410 |
+| PP_geo_hour | inc | 0.8 | 15.0 | 1.5 | 20 | 0.8356 |
 
-Full per-method (MASCOT / Uniform Binning / w/o Normalization) hyperparameter
+> **Warning — decrease tasks are not robust to these settings.**
+> Each decrease configuration sits one grid step above an abrupt collapse.
+> On `PP_geo_hour` decrease, λ = 0.1 gives R@10 = 0.9410 but λ = 0.2 gives
+> 0.0477. On `PP_hour` decrease, σ_time = 0.5 gives 0.9059 but σ_time = 1.0
+> gives 0.0351. Increase tasks are far more forgiving. If you change any
+> discretization parameter, sweep it and pick a value strictly interior to
+> the stable region. See Appendix D of the paper for full sweeps.
+
+σ_geo is in **degrees** (Euclidean distance in lat/lon degree-space; see
+`get_geo_iu_probs` in `src/msdpp/data.py`). σ_time is in hours. Full
+per-method (MASCOT / Uniform Binning / w/o Normalization) hyperparameter
 table for all datasets is in [`rebuttal/appendix_hyperparameters.md`](rebuttal/appendix_hyperparameters.md).
-
-**Sensitivity to λ is σ-dependent, not fixed.** At each task's val-best σ,
-the corrected θ sweeps in [`results/sensitivity_v2/SUMMARY.md`](results/sensitivity_v2/SUMMARY.md)
-show every decrease-task operating point sits one grid step above a hard
-recall cliff (e.g. PP_geo_hour_dec at θ=0.1 gives R@10=0.9410; at θ=0.2 it
-collapses to 0.0477). The earlier claim of a wide stable λ range was based
-on stale sensitivity sweeps at σ values that did not match the Table 1
-val-best; see [`results/sensitivity_v2/SUMMARY.md`](results/sensitivity_v2/SUMMARY.md)
-for the reconciled per-direction findings.
+Full sweeps: [`results/sensitivity_v2/SUMMARY.md`](results/sensitivity_v2/SUMMARY.md).
 
 ---
 
@@ -489,10 +490,15 @@ If you use MASCOT in your research, please cite:
 @inproceedings{sharma2026mascot,
   title={{MASCOT: Model-Aware Submodular Coverage for Composite-Attribute Text-to-Image Retrieval}},
   author={Sharma, Aaryan and Prasad C, Vishak and Singh, Virendra and Ramakrishnan, Ganesh},
-  booktitle={Proceedings of the 34th ACM International Conference on Multimedia (ACM MM '26)},
-  year={2026}
+  booktitle={Proceedings of the 34th ACM International Conference on Multimedia (MM '26)},
+  year={2026},
+  publisher={ACM},
+  address={New York, NY, USA},
+  doi={10.1145/3767308.3836500}
 }
 ```
+
+*(Pages will be added after the proceedings are compiled in November.)*
 
 Also cite the MS-DPP baseline and codebase this work builds on:
 
@@ -509,4 +515,12 @@ Also cite the MS-DPP baseline and codebase this work builds on:
 
 ## License
 
-See the [LICENSE](LICENSE) file for details.
+Copyright 2026 the MASCOT authors. See [LICENSE](LICENSE).
+
+MASCOT is a derivative of the [MS-DPP codebase](https://github.com/NEC-N-SOGI/msdpp)
+(Copyright 2025 NEC Corporation), whose license permits research use only and
+requires distributions to include the license notice and reference the accompanying
+publication. The MASCOT release honours those terms: the same license text applies
+to this repository, and both the MASCOT paper (this repository's citation, above)
+and the MS-DPP paper (also cited above) are the accompanying publications. Do not
+use this code for commercial purposes.

@@ -104,6 +104,7 @@ MASCOT/
 ├── examples/
 │   ├── grid_search_eval.py        ← Main evaluation script (grid search over λ, σ)
 │   ├── sensitivity_analysis.py    ← Hyperparameter sensitivity tables
+│   ├── time_prs.py                ← Preference Reflection Score (Table 3)
 │   ├── clip_gridsearch.py         ← CLIP backbone generalization (post-submission)
 │   └── configs/
 │       ├── overall.json           ← Dataset/model config (PP variants)
@@ -132,6 +133,7 @@ MASCOT/
 │   ├── pp_clip/                       ← CLIP backbone SUMMARY.md + tables
 │   ├── sensitivity_v2/                ← Per-direction θ sweeps at Table 1 val-best σ (supersedes results/sensitivity/)
 │   ├── figures_regenerated/           ← Recall@K + trade-off plots after bug #1+#2 fixes
+│   ├── failure_cases_run2/            ← PP tables/*.json (paper's Table 1/2 source) + analysis.py (Figure 1)
 │   ├── failure_cases_corrected/       ← Per-query MASCOT/UB/no_norm rankings (30 files, verified against Table 1/2/9/10/11)
 │   ├── _stale_pre_fix/                ← Documentation of the mislabeled failure_cases files from the pre-fix pipeline
 │   └── analysis_vg_i1m.py             ← VG and I1M result analysis
@@ -346,7 +348,7 @@ Full sweeps: [`results/sensitivity_v2/SUMMARY.md`](results/sensitivity_v2/SUMMAR
 | Combined | **HM (Overall Score)** | Harmonic Mean of R@10 and Div Index |
 | Controllability | **PRS** | Preference Reflection Score — monotonicity of Div Index as λ sweeps 0→1 |
 
-In **increase** tasks, higher Div Index = better. In **decrease** tasks, the paper reports the transformed metric `1 − DM` so that higher is always better in both directions (see Appendix G.3). The `mean_vendi` / `div_index` field in `tables/*.json` is already transformed to higher-is-better in `EvalIndexCalculator.calc()` (`src/msdpp/evalindex/eval_index.py:162-164` applies `1 − ext_vendi` when `direction == DivDir.DECREASE` before harmonic-mean combination); no downstream conversion needed.
+**Div Index is higher-is-better in both directions.** In decrease-direction runs, the metadata channel is inverted (1 − Ṽ) inside `EvalIndexCalculator.run()` in `src/msdpp/evalindex/eval_index.py` before it is harmonically combined with the appearance channel — the stored `div_index` / `mean_vendi` value already carries the transform. Nothing downstream inverts it a second time. See Appendix G.6 ("Diversity Metric and Overall Score Normalization") for the definition.
 
 ---
 

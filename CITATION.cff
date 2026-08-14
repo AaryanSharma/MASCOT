@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+authors:
+  - family-names: Sharma
+    given-names: Aaryan
+  - family-names: Prasad C
+    given-names: Vishak
+  - family-names: Singh
+    given-names: Virendra
+  - family-names: Ramakrishnan
+    given-names: Ganesh
+title: "MASCOT: Model-Aware Submodular Coverage for Composite-Attribute Text-to-Image Retrieval"
+preferred-citation:
+  type: conference-paper
+  title: "MASCOT: Model-Aware Submodular Coverage for Composite-Attribute Text-to-Image Retrieval"
+  authors:
+    - family-names: Sharma
+      given-names: Aaryan
+    - family-names: Prasad C
+      given-names: Vishak
+    - family-names: Singh
+      given-names: Virendra
+    - family-names: Ramakrishnan
+      given-names: Ganesh
+  collection-title: "Proceedings of the 34th ACM International Conference on Multimedia (MM '26)"
+  year: 2026
+  publisher:
+    name: ACM
+  doi: "10.1145/3767308.3836500"
